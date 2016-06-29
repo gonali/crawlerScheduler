@@ -1,0 +1,10 @@
+########################################
+#
+#
+
+StatusCode:
+
+finished:      0
+crawling:      1
+timeout:       2
+exceptionStop: 3
