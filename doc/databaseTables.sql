@@ -54,7 +54,7 @@ CREATE TABLE crawlerTaskSlaveTable(
 );
 
 
-CREATE TABLE crawlerTaskConfig(
+CREATE TABLE crawlerTaskConfigTable(
   configId INT NOT NULL AUTO_INCREMENT,
   redisHost VARCHAR(18),
   redisPort INT,

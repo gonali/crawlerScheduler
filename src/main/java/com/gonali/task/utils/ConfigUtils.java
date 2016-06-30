@@ -21,7 +21,7 @@ public class ConfigUtils {
 
     }
 
-    public static ConfigUtils getConfigUtils(String prefix) {
+    public static ConfigUtils getConfigUtils() {
 
         ResourceBundle rb;
 
@@ -29,17 +29,17 @@ public class ConfigUtils {
 
         rb = PropertyResourceBundle.getBundle("config");
 
-        configUtils.hostname = rb.getString(prefix + "HOSTNAME");
-        configUtils.port = Integer.parseInt(rb.getString(prefix + "PORT"));
-        configUtils.dbName = rb.getString(prefix + "DBNAME");
-        configUtils.username = rb.getString(prefix + "USER");
-        configUtils.password = rb.getString(prefix + "PASSWORD");
+        configUtils.hostname = rb.getString("MYSQL_HOSTNAME");
+        configUtils.port = Integer.parseInt(rb.getString("MYSQL_PORT"));
+        configUtils.dbName = rb.getString("MYSQL_DBNAME");
+        configUtils.username = rb.getString("MYSQL_USER");
+        configUtils.password = rb.getString("MYSQL_PASSWORD");
 
 
         return configUtils;
     }
 
-    public static ConfigUtils getConfigUtils(String prefix, String configName) {
+/*    public static ConfigUtils getConfigUtils(String prefix, String configName) {
 
         ResourceBundle rb;
 
@@ -55,8 +55,7 @@ public class ConfigUtils {
 
 
         return configUtils;
-    }
-
+    }*/
 
 
     public static ResourceBundle getResourceBundle() {

@@ -92,7 +92,18 @@ public class TaskConfigModel implements EntityModel {
 
     @Override
     public String updateSqlBuilder(String tableName, EntityModel model) {
-        return null;
+
+        TaskConfigModel taskConfigModel = (TaskConfigModel) model;
+        String sql = "UPDATE " + tableName + " SET redisHost = '" + taskConfigModel.getRedisHost() + "'," +
+                "redisPort = '" + taskConfigModel.getRedisPort() + "'," +
+                "maxTaskQueueSize = " + taskConfigModel.getMaxTaskQueueSize() + ";" +
+                "maxTaskRun = " + taskConfigModel.getMaxTaskRun() + ";" +
+                "maxHeartbeatTimeoutCount = " + taskConfigModel.getMaxHeartbeatTimeoutCount() + ";" +
+                "slaveHeartbeatInterval = " + taskConfigModel.getSlaveHeartbeatInterval() + ";" +
+                "slaveAppScript = '" + taskConfigModel.getSlaveAppScript() + "'  " +
+                "WHERE configId = " + taskConfigModel.getConfigId();
+
+        return sql;
     }
 
     @Override
