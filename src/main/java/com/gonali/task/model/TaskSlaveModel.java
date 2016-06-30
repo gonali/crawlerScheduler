@@ -1,26 +1,15 @@
-package com.gonali.task.entityModel;
-
-import com.alibaba.fastjson.JSONObject;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import java.io.Serializable;
+package com.gonali.task.model;
 
 /**
- * Created by TianyuanPan on 6/29/16.
+ * Created by TianyuanPan on 6/30/16.
  */
+public class TaskSlaveModel implements EntityModel{
 
-@Entity
-public class CrawlerSlave implements Serializable {
-
-    @Id
-    @Column(nullable = false)
     private String slaveId;
     private String slaveUsername;
     private String slavePassword;
     private String slaveIp;
-    private String slaveSshPort;
+    private int slaveSshPort = 22;
     private String slaveAppPath;
 
 
@@ -56,11 +45,11 @@ public class CrawlerSlave implements Serializable {
         this.slaveIp = slaveIp;
     }
 
-    public String getSlaveSshPort() {
+    public int getSlaveSshPort() {
         return slaveSshPort;
     }
 
-    public void setSlaveSshPort(String slaveSshPort) {
+    public void setSlaveSshPort(int slaveSshPort) {
         this.slaveSshPort = slaveSshPort;
     }
 
@@ -73,17 +62,22 @@ public class CrawlerSlave implements Serializable {
     }
 
     @Override
-    public String toString() {
+    public String getPrimaryKey() {
+        return null;
+    }
 
-        JSONObject json = new JSONObject();
+    @Override
+    public String insertSqlBuilder(String tableName, EntityModel model) {
+        return null;
+    }
 
-        json.put("slaveId", slaveId);
-        json.put("slaveUsername", slaveUsername);
-        json.put("slavePassword", slavePassword);
-        json.put("slaveIp", slaveIp);
-        json.put("slaveSshPort", slaveSshPort);
-        json.put("slaveAppPath", slaveAppPath);
+    @Override
+    public String updateSqlBuilder(String tableName, EntityModel model) {
+        return null;
+    }
 
-        return json.toJSONString();
+    @Override
+    public String subUpdateSqlBuilder(String tableName, EntityModel model, String... fields) {
+        return null;
     }
 }

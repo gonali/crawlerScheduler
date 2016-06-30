@@ -1,4 +1,4 @@
-CREATE TABLE CrawlerUser
+CREATE TABLE crawlerTaskUserTable
 (
   userId VARCHAR(64) NOT NULL,
   userAppkey TEXT,
@@ -8,7 +8,7 @@ CREATE TABLE CrawlerUser
 );
 
 
-CREATE TABLE CrawlerTask
+CREATE TABLE crawlerTaskTable
 (
   userId VARCHAR(64) NOT NULL,
   taskId VARCHAR(128) NOT NULL,
@@ -43,7 +43,7 @@ CREATE TABLE CrawlerTask
 );
 
 
-CREATE TABLE CrawlerSlave(
+CREATE TABLE crawlerTaskSlaveTable(
   slaveId VARCHAR(64) NOT NULL ,
   slaveUsername VARCHAR(64) DEFAULT 'slave' ,
   slavePassword VARCHAR(64) DEFAULT 'password',
@@ -51,4 +51,17 @@ CREATE TABLE CrawlerSlave(
   slaveSshPort int DEFAULT 22,
   slaveAppPath VARCHAR(1024) DEFAULT '~/',
   PRIMARY KEY (slaveId)
+);
+
+
+CREATE TABLE crawlerTaskConfig(
+  configId INT NOT NULL AUTO_INCREMENT,
+  redisHost VARCHAR(18),
+  redisPort INT,
+  maxTaskQueueSize INT,
+  maxTaskRun INT,
+  maxHeartbeatTimeoutCount INT,
+  slaveHeartbeatInterval INT,
+  slaveAppScript VARCHAR(512) DEFAULT 'crawlerStart.sh',
+  PRIMARY KEY (configId)
 );

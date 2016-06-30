@@ -7,53 +7,6 @@
     </database-info>
     <case-sensitivity plain-identifiers="exact" quoted-identifiers="exact"/>
     <schema name="" catalog="wifi_ac"/>
-    <table name="CrawlerSlave" schema="" catalog="wifi_ac" type="TABLE">
-      <column name="slaveId" sqlType="VARCHAR" precision="64" scale="0" nullable="false" jdbcType="12"/>
-      <column name="slaveUsername" sqlType="VARCHAR" precision="64" scale="0" nullable="true" jdbcType="12" def="J3NsYXZlJw=="/>
-      <column name="slavePassword" sqlType="VARCHAR" precision="64" scale="0" nullable="true" jdbcType="12" def="J3Bhc3N3b3JkJw=="/>
-      <column name="slaveIp" sqlType="VARCHAR" precision="18" scale="0" nullable="true" jdbcType="12" def="JzEyNy4wLjAuMSc="/>
-      <column name="slaveSshPort" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4" def="MjI="/>
-      <column name="slaveAppPath" sqlType="VARCHAR" precision="1024" scale="0" nullable="true" jdbcType="12" def="J34vJw=="/>
-      <primary-key name="PRIMARY" columns="slaveId"/>
-    </table>
-    <table name="CrawlerTask" schema="" catalog="wifi_ac" type="TABLE">
-      <column name="userId" sqlType="VARCHAR" precision="64" scale="0" nullable="false" jdbcType="12"/>
-      <column name="taskId" sqlType="VARCHAR" precision="128" scale="0" nullable="false" jdbcType="12"/>
-      <column name="taskType" sqlType="ENUM" precision="9" scale="0" nullable="false" jdbcType="1" def="J1VOU0VUJw=="/>
-      <column name="taskRemark" sqlType="TEXT" precision="65535" scale="0" nullable="true" jdbcType="-1"/>
-      <column name="taskSeedUrl" sqlType="TEXT" precision="65535" scale="0" nullable="true" jdbcType="-1"/>
-      <column name="taskCrawlerDepth" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
-      <column name="taskDynamicDepth" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
-      <column name="taskPass" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
-      <column name="taskWeight" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
-      <column name="taskStartTime" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="Q1VSUkVOVF9USU1FU1RBTVA=" version="true"/>
-      <column name="taskRecrawlerDays" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
-      <column name="taskTemplatePath" sqlType="TEXT" precision="65535" scale="0" nullable="true" jdbcType="-1"/>
-      <column name="taskTagPath" sqlType="TEXT" precision="65535" scale="0" nullable="true" jdbcType="-1"/>
-      <column name="taskSeedPath" sqlType="TEXT" precision="65535" scale="0" nullable="true" jdbcType="-1"/>
-      <column name="taskConfigPath" sqlType="TEXT" precision="65535" scale="0" nullable="true" jdbcType="-1"/>
-      <column name="taskClickRegexPath" sqlType="TEXT" precision="65535" scale="0" nullable="true" jdbcType="-1"/>
-      <column name="taskProtocolFilterPath" sqlType="TEXT" precision="65535" scale="0" nullable="true" jdbcType="-1"/>
-      <column name="taskSuffixFilterPath" sqlType="TEXT" precision="65535" scale="0" nullable="true" jdbcType="-1"/>
-      <column name="taskRegexFilterPath" sqlType="TEXT" precision="65535" scale="0" nullable="true" jdbcType="-1"/>
-      <column name="taskStatus" sqlType="ENUM" precision="12" scale="0" nullable="false" jdbcType="1" def="J1VOQ1JBV0wn"/>
-      <column name="taskDeleteFlag" sqlType="TINYINT" precision="3" scale="0" nullable="true" jdbcType="-6" def="MA=="/>
-      <column name="taskSeedAmount" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
-      <column name="taskSeedImportAmount" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
-      <column name="taskCompleteTimes" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
-      <column name="taskInstanceThreads" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" def="MQ=="/>
-      <column name="taskNodeInstances" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" def="MQ=="/>
-      <column name="taskStopTime" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="JzAwMDAtMDAtMDAgMDA6MDA6MDAn"/>
-      <column name="taskCrawlerAmountInfo" sqlType="TEXT" precision="65535" scale="0" nullable="true" jdbcType="-1"/>
-      <column name="taskCrawlerInstanceInfo" sqlType="TEXT" precision="65535" scale="0" nullable="true" jdbcType="-1"/>
-      <primary-key name="PRIMARY" columns="taskId"/>
-    </table>
-    <table name="CrawlerUser" schema="" catalog="wifi_ac" type="TABLE">
-      <column name="userId" sqlType="VARCHAR" precision="64" scale="0" nullable="false" jdbcType="12"/>
-      <column name="userAppkey" sqlType="TEXT" precision="65535" scale="0" nullable="true" jdbcType="-1"/>
-      <column name="userDescription" sqlType="TEXT" precision="65535" scale="0" nullable="true" jdbcType="-1"/>
-      <primary-key name="PRIMARY" columns="userId"/>
-    </table>
     <table name="crawlerTaskTable" schema="" catalog="wifi_ac" type="TABLE">
       <column name="userId" sqlType="VARCHAR" precision="64" scale="0" nullable="false" jdbcType="12"/>
       <column name="taskId" sqlType="VARCHAR" precision="64" scale="0" nullable="false" jdbcType="12"/>
