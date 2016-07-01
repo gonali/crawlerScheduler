@@ -7,6 +7,15 @@
     </database-info>
     <case-sensitivity plain-identifiers="exact" quoted-identifiers="exact"/>
     <schema name="" catalog="wifi_ac"/>
+    <table name="crawlerTaskSlaveTable" schema="" catalog="wifi_ac" type="TABLE">
+      <column name="slaveId" sqlType="VARCHAR" precision="64" scale="0" nullable="false" jdbcType="12"/>
+      <column name="slaveUsername" sqlType="VARCHAR" precision="64" scale="0" nullable="true" jdbcType="12" def="J3NsYXZlJw=="/>
+      <column name="slavePassword" sqlType="VARCHAR" precision="64" scale="0" nullable="true" jdbcType="12" def="J3Bhc3N3b3JkJw=="/>
+      <column name="slaveIp" sqlType="VARCHAR" precision="18" scale="0" nullable="true" jdbcType="12" def="JzEyNy4wLjAuMSc="/>
+      <column name="slaveSshPort" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4" def="MjI="/>
+      <column name="slaveAppPath" sqlType="VARCHAR" precision="1024" scale="0" nullable="true" jdbcType="12" def="J34vJw=="/>
+      <primary-key name="PRIMARY" columns="slaveId"/>
+    </table>
     <table name="crawlerTaskTable" schema="" catalog="wifi_ac" type="TABLE">
       <column name="userId" sqlType="VARCHAR" precision="64" scale="0" nullable="false" jdbcType="12"/>
       <column name="taskId" sqlType="VARCHAR" precision="64" scale="0" nullable="false" jdbcType="12"/>

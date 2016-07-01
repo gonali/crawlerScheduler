@@ -3,7 +3,7 @@ package com.gonali.task.model;
 /**
  * Created by TianyuanPan on 6/30/16.
  */
-public class TaskSlaveModel implements EntityModel{
+public class TaskSlaveModel implements EntityModel {
 
     private String slaveId;
     private String slaveUsername;
@@ -68,12 +68,32 @@ public class TaskSlaveModel implements EntityModel{
 
     @Override
     public String insertSqlBuilder(String tableName, EntityModel model) {
-        return null;
+
+        TaskSlaveModel slave = (TaskSlaveModel) model;
+        String sql = "INSERT INTO " + tableName + " (slaveId,slaveUsername,slavePassword," +
+                "slaveIp,slaveSshPort,slaveAppPath) VALUES (" +
+                "'" + slave.getSlaveId() + "'," +
+                "'" + slave.getSlaveUsername() + "'," +
+                "'" + slave.getSlavePassword() + "'," +
+                "'" + slave.getSlaveIp() + "'," +
+                +slave.getSlaveSshPort() + "," +
+                "'" + slave.getSlaveAppPath() + "'" +
+                ");";
+        return sql;
     }
 
     @Override
     public String updateSqlBuilder(String tableName, EntityModel model) {
-        return null;
+
+        TaskSlaveModel slave = (TaskSlaveModel) model;
+        String sql = "UPDATE  " + tableName + " SET " +
+                "slaveUsername = " + "'" + slave.getSlaveUsername() + "'," +
+                "slavePassword = " + "'" + slave.getSlavePassword() + "'," +
+                "slaveIp = " + "'" + slave.getSlaveIp() + "'," +
+                "slaveSshPort = " + slave.getSlaveSshPort() + "," +
+                "slaveAppPath = " + "'" + slave.getSlaveAppPath() + "'" +
+                " WHERE slaveId = " + "'" + slave.getSlaveId() + "';";
+        return sql;
     }
 
     @Override

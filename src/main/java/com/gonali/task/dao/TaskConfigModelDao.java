@@ -3,6 +3,7 @@ package com.gonali.task.dao;
 import com.gonali.task.dao.client.MysqlClient;
 import com.gonali.task.model.EntityModel;
 import com.gonali.task.model.TaskConfigModel;
+import com.gonali.task.model.fields.TaskConfigModelTableField;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,28 +18,29 @@ public class TaskConfigModelDao implements QueryDao {
     private MysqlClient mysqlClient;
 
 
-    public TaskConfigModelDao(){
+    public TaskConfigModelDao() {
 
         mysqlClient = new MysqlClient();
     }
 
-    private List<EntityModel> boxingObject (ResultSet resultSet) throws Exception{
+    private List<EntityModel> boxingObject(ResultSet resultSet) throws Exception {
 
         List<EntityModel> entityModelList = new ArrayList<>();
         TaskConfigModel taskConfigModel;
 
-        while (resultSet.next()){
+        while (resultSet.next()) {
 
             taskConfigModel = new TaskConfigModel();
 
-            taskConfigModel.setConfigId(resultSet.getInt("configId"));
-            taskConfigModel.setRedisHost(resultSet.getString("redisHost"));
-            taskConfigModel.setRedisPort(resultSet.getInt("redisPort"));
-            taskConfigModel.setMaxTaskQueueSize(resultSet.getInt("maxTaskQueueSize"));
-            taskConfigModel.setMaxTaskRun(resultSet.getInt("maxTaskRun"));
-            taskConfigModel.setMaxHeartbeatTimeoutCount(resultSet.getInt("maxHeartbeatTimeoutCount"));
-            taskConfigModel.setSlaveHeartbeatInterval(resultSet.getInt("slaveHeartbeatInterval"));
-            taskConfigModel.setSlaveAppScript(resultSet.getString("slaveAppScript"));
+            taskConfigModel.setConfigId(resultSet.getInt(TaskConfigModelTableField.PK));
+            taskConfigModel.setRedisHost(resultSet.getString(TaskConfigModelTableField.redisHost));
+            taskConfigModel.setRedisPort(resultSet.getInt(TaskConfigModelTableField.redisPort));
+            taskConfigModel.setMaxTaskQueueSize(resultSet.getInt(TaskConfigModelTableField.maxTaskQueueSize));
+            taskConfigModel.setMaxTaskRun(resultSet.getInt(TaskConfigModelTableField.maxTaskRun));
+            taskConfigModel.setMaxHeartbeatTimeoutCount(resultSet.getInt(TaskConfigModelTableField.maxHeartbeatTimeoutCount));
+            taskConfigModel.setSlaveHeartbeatInterval(resultSet.getInt(TaskConfigModelTableField.slaveHeartbeatInterval));
+            taskConfigModel.setSlaveAppScript(resultSet.getString(TaskConfigModelTableField.slaveAppScript));
+            taskConfigModel.setAdminPassword(resultSet.getString(TaskConfigModelTableField.adminPassword));
 
             entityModelList.add(taskConfigModel);
         }
@@ -47,7 +49,6 @@ public class TaskConfigModelDao implements QueryDao {
         return entityModelList;
 
     }
-
 
 
     @Override
@@ -73,7 +74,7 @@ public class TaskConfigModelDao implements QueryDao {
     @Override
     public List<EntityModel> selectAll(String tableName) {
 
-        String sql = "SELECT * FROM " +  tableName + ";";
+        String sql = "SELECT * FROM " + tableName + ";";
 
         ResultSet resultSet;
         try {
@@ -84,7 +85,7 @@ public class TaskConfigModelDao implements QueryDao {
 
             e.printStackTrace();
 
-        }catch (Exception ex){
+        } catch (Exception ex) {
 
             ex.getMessage();
         }

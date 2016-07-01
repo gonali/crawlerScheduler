@@ -13,6 +13,7 @@ public class TaskConfigModel implements EntityModel {
     private int maxHeartbeatTimeoutCount;
     private int slaveHeartbeatInterval;
     private String slaveAppScript;
+    private String adminPassword;
 
 
     public int getConfigId() {
@@ -79,6 +80,14 @@ public class TaskConfigModel implements EntityModel {
         this.slaveAppScript = slaveAppScript;
     }
 
+    public String getAdminPassword() {
+        return adminPassword;
+    }
+
+    public void setAdminPassword(String adminPassword) {
+        this.adminPassword = adminPassword;
+    }
+
     @Override
     public String getPrimaryKey() {
 
@@ -101,6 +110,7 @@ public class TaskConfigModel implements EntityModel {
                 "maxHeartbeatTimeoutCount = " + taskConfigModel.getMaxHeartbeatTimeoutCount() + ";" +
                 "slaveHeartbeatInterval = " + taskConfigModel.getSlaveHeartbeatInterval() + ";" +
                 "slaveAppScript = '" + taskConfigModel.getSlaveAppScript() + "'  " +
+                "adminPassword = '" + taskConfigModel.getAdminPassword() + "' " +
                 "WHERE configId = " + taskConfigModel.getConfigId();
 
         return sql;

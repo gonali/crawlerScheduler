@@ -29,7 +29,7 @@ public class MysqlClient extends LoggerUtils {
 
     public MysqlClient() {
 
-        this.configUtils = ConfigUtils.getConfigUtils("MYSQL_");
+        this.configUtils = ConfigUtils.getConfigUtils();
         this.pool = MySqlPoolUtils.getMySqlPoolUtils(configUtils);
         this.myStatement = null;
 

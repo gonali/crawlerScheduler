@@ -63,5 +63,6 @@ CREATE TABLE crawlerTaskConfigTable(
   maxHeartbeatTimeoutCount INT,
   slaveHeartbeatInterval INT,
   slaveAppScript VARCHAR(512) DEFAULT 'crawlerStart.sh',
+  adminPassword VARCHAR(512)
   PRIMARY KEY (configId)
 );
