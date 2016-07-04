@@ -10,7 +10,8 @@ import java.security.NoSuchAlgorithmException;
  */
 public class MD5Utils {
 
-    private MD5Utils(){}
+    private MD5Utils() {
+    }
 
     public static String getDigest(InputStream is, MessageDigest md, int byteArraySize)
             throws NoSuchAlgorithmException,
@@ -27,23 +28,39 @@ public class MD5Utils {
         }
 
         byte[] digest = md.digest();
-        String result = new String(digest);
+
+        String result = "";
+
+        for (byte b : digest) {
+            // byte转换成16进制
+            result += String.format("%02x", b);
+        }
+
         return result;
     }
 
-    public static String getStringMD5(String msg, MessageDigest md, int byteArraySize) {
+    public static String getStringMD5(String msg) {
 
         MessageDigest md = null;
+
         try {
+
             md = MessageDigest.getInstance("MD5");
+
         } catch (NoSuchAlgorithmException e) {
+
             e.printStackTrace();
+            return "";
         }
+
         md.reset();
-        md.update(msg.getBytes());
+
+        md.update(msg.getBytes(), 0, msg.getBytes().length);
+
         byte[] bytes = md.digest();
 
         String result = "";
+
         for (byte b : bytes) {
             // byte转换成16进制
             result += String.format("%02x", b);
@@ -51,4 +68,13 @@ public class MD5Utils {
 
         return result;
     }
+
+    /*
+    //test
+    public static void main(String[] args) {
+        String s = "admin";
+
+        System.out.println(getStringMD5(s));
+    }*/
+
 }

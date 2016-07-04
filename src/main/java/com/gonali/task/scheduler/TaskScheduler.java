@@ -1,17 +1,17 @@
 package com.gonali.task.scheduler;
 
 
-
-import com.gonali.task.model.HeartbeatMsgModel;
+import com.gonali.task.message.RuntimeControlMsg;
 import com.gonali.task.message.codes.HeartbeatStatusCode;
-import com.gonali.task.model.TaskModel;
 import com.gonali.task.message.codes.TaskStatus;
+import com.gonali.task.model.HeartbeatMsgModel;
+import com.gonali.task.model.TaskModel;
 import com.gonali.task.nodes.NodeInfo;
 import com.gonali.task.redisQueue.HeartbeatMsgQueue;
 import com.gonali.task.redisQueue.TaskQueue;
+import com.gonali.task.rulers.SimpleLongTimeFirstRuler;
 import com.gonali.task.rulers.base.Ruler;
 import com.gonali.task.rulers.base.RulerBase;
-import com.gonali.task.rulers.SimpleLongTimeFirstRuler;
 import com.gonali.task.utils.ConfigUtils;
 
 import java.util.ArrayList;
@@ -24,6 +24,7 @@ public class TaskScheduler {
 
     private static volatile TaskScheduler scheduler;
 
+    private RuntimeControlMsg runtimeControlMsg;
     private CurrentTask currentTasks;
     private HeartbeatUpdater heartbeatUpdater;
     private List<NodeInfo> nodeInfoList;
@@ -59,6 +60,7 @@ public class TaskScheduler {
 
     private TaskScheduler() {
 
+        runtimeControlMsg = RuntimeControlMsg.getRuntimeControlMsg();
         heartbeatUpdater = new HeartbeatUpdater();
         try {
 
@@ -233,29 +235,33 @@ public class TaskScheduler {
 
     public void schedulerStart() {
 
-        cleanTaskQueue();
-        cleanHeartbeatMsgQueue();
-        new Thread(heartbeatUpdater).start();
 
         while (true) {
 
+            if (runtimeControlMsg.isTaskRunning()) {
 
-            try {
-                ruler.writeBack(this);
-                currentTasks = ruler.doSchedule(this);
+                cleanTaskQueue();
+                cleanHeartbeatMsgQueue();
+                new Thread(heartbeatUpdater).start();
 
-                List<TaskModel> tasks = currentTasks.getUncrawlTask();
+                while (true) {
 
-                for (TaskModel t : tasks) {
+                    try {
+                        ruler.writeBack(this);
+                        currentTasks = ruler.doSchedule(this);
 
-                    t.setTaskStatus(TaskStatus.CRAWLING);
-                    currentTasks.setTaskStatus(t.getTaskId(), t.getTaskStatus());
-                    ((RulerBase) ruler).addToWriteBack(t);
+                        List<TaskModel> tasks = currentTasks.getUncrawlTask();
 
-                    setTaskStartInfo(t);
+                        for (TaskModel t : tasks) {
 
-                    System.out.println("Starting task, Id = [ " + t.getTaskId() + " ]");
-                    new Thread(new NodesStarting(t, nodeInfoList)).start();
+                            t.setTaskStatus(TaskStatus.CRAWLING);
+                            currentTasks.setTaskStatus(t.getTaskId(), t.getTaskStatus());
+                            ((RulerBase) ruler).addToWriteBack(t);
+
+                            setTaskStartInfo(t);
+
+                            System.out.println("Starting task, Id = [ " + t.getTaskId() + " ]");
+                            new Thread(new NodesStarting(t, nodeInfoList)).start();
 
                    /* for (NodeInfo node : nodeInfoList) {
 
@@ -270,23 +276,36 @@ public class TaskScheduler {
                             ex.printStackTrace();
                         }
                     }*/
+                        }
+
+                        killTimeoutNodes(currentTasks);
+
+                        currentTasks.taskStatusChecking();
+                        currentTasks.taskNodeTimeoutChecking();
+                        currentTasks.taskFinishedChecking(this);
+                        currentTasks.cleanFinishedHeartbeat(this.heartbeatUpdater);
+
+                        heartbeatUpdater.cleanMoreTimeoutHeartbeat(30);
+
+                        //System.out.println("Is CurrentTaskArray have finished task ? : " + currentTasks.isHaveFinishedTask());
+
+                    } catch (Exception e) {
+                        System.out.println("Exception: at TaskScheduler.java, method schedulerStart() B.");
+                        e.printStackTrace();
+                    }
+
+                    try {
+
+                        Thread.sleep(500);
+
+                    } catch (InterruptedException e) {
+
+                        e.printStackTrace();
+                    }
+
                 }
-
-                killTimeoutNodes(currentTasks);
-
-                currentTasks.taskStatusChecking();
-                currentTasks.taskNodeTimeoutChecking();
-                currentTasks.taskFinishedChecking(this);
-                currentTasks.cleanFinishedHeartbeat(this.heartbeatUpdater);
-
-                heartbeatUpdater.cleanMoreTimeoutHeartbeat(30);
-
-                //System.out.println("Is CurrentTaskArray have finished task ? : " + currentTasks.isHaveFinishedTask());
-
-            } catch (Exception e) {
-                System.out.println("Exception: at TaskScheduler.java, method schedulerStart() B.");
-                e.printStackTrace();
             }
+
 
             try {
 

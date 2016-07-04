@@ -27,7 +27,14 @@ public class TaskDeamon implements Runnable {
     @Override
     public void run() {
 
-        scheduler.schedulerStart();
+        try {
+
+            scheduler.schedulerStart();
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
     }
 
 

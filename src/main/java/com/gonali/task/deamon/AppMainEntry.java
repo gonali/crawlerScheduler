@@ -1,31 +1,30 @@
 package com.gonali.task.deamon;
 
 
-import com.gonali.task.rulers.SimpleLongTimeFirstRuler;
 import com.gonali.task.rulers.base.RulerBase;
-
-import java.lang.management.ManagementFactory;
 
 /**
  * Created by TianyuanPan on 6/5/16.
  */
 public class AppMainEntry {
 
-    private static MainDeamon mainDeamon;
+    private static TaskDeamon taskDeamon;
 
 
     static {
 
-        mainDeamon = MainDeamon.createDeamon();
+        taskDeamon = TaskDeamon.createDeamon();
     }
 
 
-    public static void main(String[] args) {
+    public void appStart(RulerBase ruler) {
 
-        System.out.println("\n\n======>>> task scheduler PID: " + ManagementFactory.getRuntimeMXBean().getName().split("@")[0] + " <<<======\n");
-        RulerBase ruler;
-        ruler = new SimpleLongTimeFirstRuler();
-        mainDeamon.appStart(ruler);
+        Thread taskDeamon = new Thread(AppMainEntry.taskDeamon.setRuler(ruler));
+        taskDeamon.setDaemon(false);
+        taskDeamon.start();
 
+        System.out.println("Hi! Scheduler AppDeamon!");
     }
+
+
 }
