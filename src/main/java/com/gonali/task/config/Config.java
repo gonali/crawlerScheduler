@@ -65,7 +65,7 @@ public class Config {
         return resourceBundle;
     }
 
-    public static void setResourceBundle(ResourceBundle resourceBundle) {
+    public template void setResourceBundle(ResourceBundle resourceBundle) {
         Config.resourceBundle = resourceBundle;
     }*/
 

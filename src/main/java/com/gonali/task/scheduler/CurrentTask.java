@@ -122,11 +122,13 @@ public class CurrentTask {
     private CurrentTaskModel[] currentTaskArray;
     private int taskNumber;
     private int nodes;
+    private int freeNodes;
 
 
     public CurrentTask(int taskNumber) {
 
         this.taskNumber = taskNumber;
+        freeNodes = taskNumber;
         currentTaskArray = new CurrentTaskModel[this.taskNumber];
     }
 
@@ -162,11 +164,13 @@ public class CurrentTask {
             if (this.currentTaskArray[i] == null) {
                 this.currentTaskArray[i] = new CurrentTaskModel(task);
                 this.currentTaskArray[i].setIsFinished(false);
+                freeNodes--;
                 break;
             }
             if (this.currentTaskArray[i].isFinished()) {
                 this.currentTaskArray[i] = new CurrentTaskModel(task);
                 this.currentTaskArray[i].setIsFinished(false);
+                freeNodes--;
                 break;
             }
         }
@@ -272,6 +276,11 @@ public class CurrentTask {
 
     }
 
+    public int getFreeNodes() {
+
+        return freeNodes;
+    }
+
     public void taskStatusChecking() {
 
         for (int i = 0; i < taskNumber; i++) {
@@ -308,6 +317,7 @@ public class CurrentTask {
                     currentTaskArray[i].setTaskStopTime(System.currentTimeMillis());
                     currentTaskArray[i].setIsFinished(true);
                     ((RulerBase)scheduler.getRuler()).addToWriteBack(currentTaskArray[i].getTask());
+                    freeNodes++;
                     System.out.println("FINISHED TASK: taskId = [ " + currentTaskArray[i].getTaskId() + " ]");
                 }
 

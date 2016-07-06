@@ -5707,7 +5707,7 @@
   var Renderer = function () {
 
     /**
-     * bootstrap button template
+     * bootstrap button templates
      * @private
      * @param {String} label button name
      * @param {Object} [options] button options
@@ -5744,7 +5744,7 @@
     };
 
     /**
-     * bootstrap icon button template
+     * bootstrap icon button templates
      * @private
      * @param {String} iconClassName
      * @param {Object} [options]
@@ -5759,7 +5759,7 @@
     };
 
     /**
-     * bootstrap popover template
+     * bootstrap popover templates
      * @private
      * @param {String} className
      * @param {String} content
@@ -5776,7 +5776,7 @@
     };
 
     /**
-     * bootstrap dialog template
+     * bootstrap dialog templates
      *
      * @param {String} className
      * @param {String} [title='']
@@ -6196,7 +6196,7 @@
     };
 
     /**
-     * shortcut table template
+     * shortcut table templates
      * @param {String} title
      * @param {String} body
      */
@@ -6746,7 +6746,7 @@
    *
    * ### Define plugin
    * ```
-   * // get template function  
+   * // get templates function
    * var tmpl = $.summernote.renderer.getTemplate();
    * 
    * // add a button   
@@ -6754,7 +6754,7 @@
    *     buttons : {
    *        // "hello"  is button's namespace.      
    *        "hello" : function(lang, options) {
-   *            // make icon button by template function          
+   *            // make icon button by templates function
    *            return tmpl.iconButton('fa fa-header', {
    *                // callback function name when button clicked 
    *                event : 'hello',

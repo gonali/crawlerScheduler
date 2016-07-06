@@ -999,7 +999,7 @@
     /**
      * An object that represents the default settings.
      *
-     * @static
+     * @templates
      * @class defaults
      * @for Grid
      * @example

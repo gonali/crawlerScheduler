@@ -80,7 +80,7 @@ define([
    *
    * ### Define plugin
    * ```
-   * // get template function  
+   * // get templates function
    * var tmpl = $.summernote.renderer.getTemplate();
    * 
    * // add a button   
@@ -88,7 +88,7 @@ define([
    *     buttons : {
    *        // "hello"  is button's namespace.      
    *        "hello" : function(lang, options) {
-   *            // make icon button by template function          
+   *            // make icon button by templates function
    *            return tmpl.iconButton('fa fa-header', {
    *                // callback function name when button clicked 
    *                event : 'hello',

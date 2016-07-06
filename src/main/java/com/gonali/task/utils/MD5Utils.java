@@ -68,10 +68,9 @@ public class MD5Utils {
 
         return result;
     }
-
-    /*
+/*
     //test
-    public static void main(String[] args) {
+    public template void main(String[] args) {
         String s = "admin";
 
         System.out.println(getStringMD5(s));

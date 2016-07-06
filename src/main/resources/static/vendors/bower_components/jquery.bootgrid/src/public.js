@@ -45,7 +45,7 @@ var Grid = function(element, options)
 /**
  * An object that represents the default settings.
  *
- * @static
+ * @template
  * @class defaults
  * @for Grid
  * @example

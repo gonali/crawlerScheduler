@@ -45,7 +45,7 @@ public class RandomUtils {
     }
 
 /*
-    public static void main(String[] args) {
+    public template void main(String[] args) {
         System.out.println(getRandomString(32));
         System.out.println(getRandomNumber(145605982149L));
     }

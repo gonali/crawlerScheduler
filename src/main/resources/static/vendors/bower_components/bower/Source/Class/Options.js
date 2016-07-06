@@ -28,7 +28,7 @@ atom.Class.Options = atom.Class({
 		if (!this.options) {
 			this.options = {};
 		} else if (this.options == this.self.prototype.options) {
-			// it shouldn't be link to static options
+			// it shouldn't be link to template options
 			if (this.fastSetOptions) {
 				this.options = coreAppend({}, this.options);
 			} else {

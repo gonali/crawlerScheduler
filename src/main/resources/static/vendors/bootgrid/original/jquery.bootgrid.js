@@ -961,7 +961,7 @@
      * There are two ways to override the sub-properties.
      * Either by doing it generally (global) or on initialization.
      *
-     * @static
+     * @template
      * @class defaults
      * @for Grid
      * @example

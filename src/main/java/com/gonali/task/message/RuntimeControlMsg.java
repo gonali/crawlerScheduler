@@ -9,11 +9,13 @@ public class RuntimeControlMsg implements Message {
 
     private boolean isTaskRunning;
     private boolean isHeartbeatUpdating;
+    private boolean isCurrentTaskFinished;
 
     private RuntimeControlMsg() {
 
-        isTaskRunning = true;
-        isHeartbeatUpdating = true;
+        isTaskRunning = false;
+        isHeartbeatUpdating = false;
+        isCurrentTaskFinished = false;
     }
 
     public static RuntimeControlMsg getRuntimeControlMsg() {
@@ -44,10 +46,19 @@ public class RuntimeControlMsg implements Message {
     }
 
 
+    public boolean isCurrentTaskFinished() {
+        return isCurrentTaskFinished;
+    }
+
+    public void setIsCurrentTaskFinished(boolean isCurrentTaskFinished) {
+        this.isCurrentTaskFinished = isCurrentTaskFinished;
+    }
+
     public void setSchedulerState(boolean isRunning){
 
         this.setIsHeartbeatUpdating(isRunning);
         this.setIsTaskRunning(isRunning);
+        this.setIsCurrentTaskFinished(isRunning);
     }
 
     @Override

@@ -276,7 +276,8 @@ public class TaskScheduler {
                 cleanHeartbeatMsgQueue();
                 new Thread(heartbeatUpdater).start();
 
-                while (true) {
+                while (runtimeControlMsg.isTaskRunning() ||
+                        currentTasks.getFreeNodes() == config.getTaskConfig().getMaxTaskRun()) {
 
                     try {
                         ruler.writeBack(this);
@@ -317,7 +318,7 @@ public class TaskScheduler {
                         currentTasks.taskFinishedChecking(this);
                         currentTasks.cleanFinishedHeartbeat(this.heartbeatUpdater);
 
-                        heartbeatUpdater.cleanMoreTimeoutHeartbeat(30);
+                        heartbeatUpdater.cleanMoreTimeoutHeartbeat(10);
 
                         //System.out.println("Is CurrentTaskArray have finished task ? : " + currentTasks.isHaveFinishedTask());
 
@@ -336,6 +337,8 @@ public class TaskScheduler {
                     }
 
                 }
+
+                runtimeControlMsg.setSchedulerState(false);
             }
 
 
@@ -356,6 +359,10 @@ public class TaskScheduler {
 
         return hostInfoList;
     }*/
+
+    public RuntimeControlMsg getRuntimeControlMsg() {
+        return runtimeControlMsg;
+    }
 
     public CurrentTask getCurrentTasks() {
         return currentTasks;

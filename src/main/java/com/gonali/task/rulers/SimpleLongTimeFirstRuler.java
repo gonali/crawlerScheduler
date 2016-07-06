@@ -54,6 +54,17 @@ public class SimpleLongTimeFirstRuler extends RulerBase {
         currentTasks = scheduler.getCurrentTasks();
         TaskModel task;
 
+        if (!scheduler.getRuntimeControlMsg().isTaskRunning()){
+
+            while((task = getTask()) != null){
+
+                task.setTaskStatus(TaskStatus.UNCRAWL);
+                addToWriteBack(task);
+            }
+            return currentTasks;
+        }
+
+
         //cleanInQueueTaskId();
 
         if (getCurrentTaskQueueLength() < 2 * scheduler.getCurrentTasks().getTaskNumber())

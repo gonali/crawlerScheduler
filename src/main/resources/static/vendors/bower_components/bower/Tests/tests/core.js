@@ -70,8 +70,8 @@ test('atom.extend', function(){
 		get testProp() { return 'testPropValue:static'; },
 		testMethod: function () { return 'testMethodValue:static'; }
 	});
-	equal(atom.testProp,     'testPropValue:static'  , 'atom.extend getter');
-	equal(atom.testMethod(), 'testMethodValue:static', 'atom.extend method');
+	equal(atom.testProp,     'testPropValue:template'  , 'atom.extend getter');
+	equal(atom.testMethod(), 'testMethodValue:template', 'atom.extend method');
 
 	var testObject = {};
 	atom.extend(testObject, { prop : 'Yes' });

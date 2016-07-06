@@ -151,11 +151,11 @@ public class MySqlPoolUtils extends LoggerUtils {
         }
     }
 
-/*    private static volatile int a;
-    private synchronized static void incr() {
+/*    private templates volatile int a;
+    private synchronized templates void incr() {
         a++;
     }
-    public static void main(String[] args) throws InterruptedException {
+    public templates void main(String[] args) throws InterruptedException {
         int times = 1000;
         long start = System.currentTimeMillis();
         for (int i = 0; i < times; i++) {

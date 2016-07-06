@@ -39,7 +39,7 @@ public class ConfigUtils {
         return configUtils;
     }
 
-/*    public static ConfigUtils getConfigUtils(String prefix, String configName) {
+/*    public template ConfigUtils getConfigUtils(String prefix, String configName) {
 
         ResourceBundle rb;
 
