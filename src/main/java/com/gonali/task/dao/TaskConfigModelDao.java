@@ -74,10 +74,11 @@ public class TaskConfigModelDao implements QueryDao {
     @Override
     public List<EntityModel> selectAll(String tableName) {
 
-        String sql = "SELECT * FROM " + tableName + ";";
+        String sql = "SELECT * FROM " + tableName;
 
         ResultSet resultSet;
         try {
+            mysqlClient.getConnection();
             resultSet = mysqlClient.executeQuerySql(sql);
             return boxingObject(resultSet);
 
@@ -88,6 +89,8 @@ public class TaskConfigModelDao implements QueryDao {
         } catch (Exception ex) {
 
             ex.getMessage();
+        }finally {
+            mysqlClient.closeConnection();
         }
 
         return null;

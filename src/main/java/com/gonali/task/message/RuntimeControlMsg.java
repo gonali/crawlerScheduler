@@ -12,7 +12,7 @@ public class RuntimeControlMsg implements Message {
 
     private RuntimeControlMsg() {
 
-        isTaskRunning = false;
+        isTaskRunning = true;
         isHeartbeatUpdating = true;
     }
 
@@ -41,6 +41,13 @@ public class RuntimeControlMsg implements Message {
 
     public void setIsHeartbeatUpdating(boolean isHeartbeatUpdating) {
         this.isHeartbeatUpdating = isHeartbeatUpdating;
+    }
+
+
+    public void setSchedulerState(boolean isRunning){
+
+        this.setIsHeartbeatUpdating(isRunning);
+        this.setIsTaskRunning(isRunning);
     }
 
     @Override

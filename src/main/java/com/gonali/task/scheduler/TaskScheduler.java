@@ -1,18 +1,21 @@
 package com.gonali.task.scheduler;
 
 
+import com.gonali.task.config.Config;
+import com.gonali.task.dao.TaskSlaveModelDao;
 import com.gonali.task.message.RuntimeControlMsg;
 import com.gonali.task.message.codes.HeartbeatStatusCode;
 import com.gonali.task.message.codes.TaskStatus;
+import com.gonali.task.model.EntityModel;
 import com.gonali.task.model.HeartbeatMsgModel;
 import com.gonali.task.model.TaskModel;
+import com.gonali.task.model.TaskSlaveModel;
 import com.gonali.task.nodes.NodeInfo;
 import com.gonali.task.redisQueue.HeartbeatMsgQueue;
 import com.gonali.task.redisQueue.TaskQueue;
 import com.gonali.task.rulers.SimpleLongTimeFirstRuler;
 import com.gonali.task.rulers.base.Ruler;
 import com.gonali.task.rulers.base.RulerBase;
-import com.gonali.task.utils.ConfigUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,9 +34,10 @@ public class TaskScheduler {
     private String command = "echo \" Hello World !! \"";
     private String sh;
     private RulerBase ruler;
-
+    private Config config;
     private int nodeNumber;
-    private List<String[]> hostInfoList;
+    //private List<String[]> hostInfoList;
+    private List<TaskSlaveModel> slaveList;
 
 
     public static CurrentTask getSchedulerCurrentTask() {
@@ -60,11 +64,12 @@ public class TaskScheduler {
 
     private TaskScheduler() {
 
+        config = Config.getConfig();
         runtimeControlMsg = RuntimeControlMsg.getRuntimeControlMsg();
         heartbeatUpdater = new HeartbeatUpdater();
         try {
 
-            this.sh = ConfigUtils.getResourceBundle().getString("NODE_START_SH");
+            this.sh = config.getTaskConfig().getSlaveAppScript();
 
         } catch (Exception e) {
             sh = "crawlerStart.sh";
@@ -73,21 +78,36 @@ public class TaskScheduler {
         int currentTaskSize;
 
         try {
-            currentTaskSize = Integer.parseInt(ConfigUtils.getResourceBundle().getString("CURRENT_TASK_ARRAY_SIZE"));
-        } catch (NumberFormatException e) {
+            currentTaskSize = config.getTaskConfig().getMaxTaskRun();
+        } catch (Exception e) {
             currentTaskSize = 3;
             e.printStackTrace();
         }
 
         try {
-            nodeNumber = Integer.parseInt(ConfigUtils.getResourceBundle("nodes").getString("NODES"));
-        } catch (NumberFormatException e) {
-            nodeNumber = 0;
+            slaveList = new ArrayList<>();
+            List<EntityModel> modelList = new TaskSlaveModelDao().selectAll(config.getTaskSlaveTable());
+            for (EntityModel m : modelList)
+                slaveList.add((TaskSlaveModel) m);
+
+        } catch (Exception e) {
+
             e.printStackTrace();
         }
 
 
-        hostInfoList = new ArrayList<>();
+        try {
+            nodeNumber = slaveList.size();
+        } catch (Exception e) {
+            nodeNumber = 0;
+            e.printStackTrace();
+        }
+
+        currentTasks = new CurrentTask(currentTaskSize);
+        currentTasks.setNodes(nodeNumber);
+
+
+       /* hostInfoList = new ArrayList<>();
 
         try {
             for (int i = 1; i <= nodeNumber; ++i) {
@@ -97,11 +117,7 @@ public class TaskScheduler {
         } catch (Exception e) {
 
             e.printStackTrace();
-        }
-
-
-        currentTasks = new CurrentTask(currentTaskSize);
-        currentTasks.setNodes(nodeNumber);
+        }*/
 
     }
 
@@ -154,7 +170,11 @@ public class TaskScheduler {
 
         for (int i = 0; i < nodeNumber; ++i) {
 
-            nodeInfo = new NodeInfo(hostInfoList.get(i)[0], hostInfoList.get(i)[1], hostInfoList.get(i)[2], command);
+            //nodeInfo = new NodeInfo(hostInfoList.get(i)[0], hostInfoList.get(i)[1], hostInfoList.get(i)[2], command);
+            nodeInfo = new NodeInfo(slaveList.get(i).getSlaveUsername(),
+                    slaveList.get(i).getSlavePassword(),
+                    slaveList.get(i).getSlaveIp(), command);
+
             nodeInfoList.add(nodeInfo);
         }
 
@@ -179,9 +199,19 @@ public class TaskScheduler {
                     if (h.getStatusCode() != HeartbeatStatusCode.FINISHED &&
                             h.getTimeoutCount() > HeartbeatUpdater.getMaxTimeoutCount()) {
 
-                        for (String[] ss : hostInfoList) {
+                        /*for (String[] ss : hostInfoList) {
                             if (ss[2].equals(h.getHostname())) {
                                 nodeInfo = new NodeInfo(ss[0], ss[1], ss[2], "kill -9 " + h.getPid());
+                                nodeInfoList.add(nodeInfo);
+                            }
+                        }*/
+                        for (TaskSlaveModel m : slaveList) {
+                            if (m.getSlaveIp().equals(h.getHostname())) {
+
+                                nodeInfo = new NodeInfo(m.getSlaveUsername(),
+                                        m.getSlavePassword(),
+                                        m.getSlaveIp(), "kill -9 " + h.getPid());
+                                nodeInfo.setPort(m.getSlaveSshPort());
                                 nodeInfoList.add(nodeInfo);
                             }
                         }
@@ -218,12 +248,14 @@ public class TaskScheduler {
         while (TaskQueue.popCrawlerTaskQueue() != null) ;
     }
 
+
     private void cleanHeartbeatMsgQueue() {
 
         HeartbeatMsgQueue queue = new HeartbeatMsgQueue();
 
         while (queue.popMessage() != null) ;
     }
+
 
     public static TaskScheduler createTaskScheduler() {
 
@@ -256,7 +288,7 @@ public class TaskScheduler {
 
                             t.setTaskStatus(TaskStatus.CRAWLING);
                             currentTasks.setTaskStatus(t.getTaskId(), t.getTaskStatus());
-                            ((RulerBase) ruler).addToWriteBack(t);
+                            ruler.addToWriteBack(t);
 
                             setTaskStartInfo(t);
 
@@ -320,10 +352,10 @@ public class TaskScheduler {
 
     }
 
-    public List<String[]> getHostInfoList() {
+    /*public List<String[]> getHostInfoList() {
 
         return hostInfoList;
-    }
+    }*/
 
     public CurrentTask getCurrentTasks() {
         return currentTasks;

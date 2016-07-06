@@ -1,5 +1,7 @@
 package com.gonali.task.nodes;
 
+import com.alibaba.fastjson.JSONObject;
+
 /**
  * Created by TianyuanPan on 6/4/16.
  */
@@ -23,10 +25,11 @@ public class NodeInfo {
         this.username = username;
         this.password = password;
         this.command = command;
-        shellUtils = ShellUtils.getShellUtils(this.username, this.password, this.hostname, this.port);
     }
 
     public String nodeExecute() {
+        if (shellUtils == null)
+            shellUtils = ShellUtils.getShellUtils(this.username, this.password, this.hostname, this.port);
 
         return this.shellUtils.doExecuteShell(command);
     }
@@ -84,5 +87,17 @@ public class NodeInfo {
     public NodeInfo setShell(ShellUtils shell) {
         this.shellUtils = shell;
         return this;
+    }
+
+    @Override
+    public String toString(){
+        JSONObject jsonObject = new JSONObject();
+
+        jsonObject.put("username", username);
+        jsonObject.put("password", password);
+        jsonObject.put("host", hostname);
+        jsonObject.put("port", port);
+
+        return jsonObject.toJSONString();
     }
 }

@@ -54,12 +54,15 @@ public class TaskSlaveModelDao implements QueryDao {
         int ret = 0;
 
         try {
-
+            mysqlClient.getConnection();
             ret = mysqlClient.excuteUpdateSql(model.insertSqlBuilder(tableName, model));
 
         } catch (SQLException e) {
 
             e.printStackTrace();
+        }finally {
+
+            mysqlClient.closeConnection();
         }
         return ret;
     }
@@ -67,10 +70,13 @@ public class TaskSlaveModelDao implements QueryDao {
     @Override
     public int update(String tableName, EntityModel model) {
         try {
+            mysqlClient.getConnection();
             return mysqlClient.excuteUpdateSql(model.updateSqlBuilder(tableName, model));
         } catch (SQLException e) {
 
             e.printStackTrace();
+        }finally {
+            mysqlClient.closeConnection();
         }
         return 0;
     }
@@ -89,10 +95,13 @@ public class TaskSlaveModelDao implements QueryDao {
     public List<EntityModel> selectAll(String tableName) {
         try {
             String sql = "SELECT * FROM " + tableName + ";";
+            mysqlClient.getConnection();
             ResultSet rs = mysqlClient.executeQuerySql(sql);
             return boxingObject(rs);
         } catch (Exception e) {
             e.printStackTrace();
+        }finally {
+            mysqlClient.closeConnection();
         }
         return null;
     }

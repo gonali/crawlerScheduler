@@ -1,7 +1,9 @@
 package com.gonali.task.scheduler;
 
 
+import com.gonali.task.config.Config;
 import com.gonali.task.message.Message;
+import com.gonali.task.message.RuntimeControlMsg;
 import com.gonali.task.model.HeartbeatMsgModel;
 import com.gonali.task.message.codes.HeartbeatStatusCode;
 import com.gonali.task.redisQueue.HeartbeatMsgQueue;
@@ -20,17 +22,20 @@ public class HeartbeatUpdater implements Runnable {
     private volatile List<HeartbeatMsgModel> heartbeatMsgList;
     private HeartbeatMsgQueue messageQueue;
     private Message message;
+    private RuntimeControlMsg runtimeControlMsg;
+    private static Config config;
     private static int checkInterval;
     private static int maxTimeoutCount;
     private Lock myLock;
 
 
     static {
+        config = Config.getConfig();
         try {
 
-            checkInterval = Integer.parseInt(ConfigUtils.getResourceBundle("nodes").getString("NODES_CHECK_INTERVAL"));
+            checkInterval = config.getTaskConfig().getSlaveHeartbeatInterval();
 
-        } catch (NumberFormatException e) {
+        } catch (Exception e) {
 
             e.printStackTrace();
             checkInterval = 10;
@@ -38,9 +43,9 @@ public class HeartbeatUpdater implements Runnable {
 
         try {
 
-            maxTimeoutCount = Integer.parseInt(ConfigUtils.getResourceBundle("nodes").getString("NODES_MAX_HEARTBEAT_TIMEOUT_COUNT"));
+            maxTimeoutCount = config.getTaskConfig().getMaxHeartbeatTimeoutCount();
 
-        } catch (NumberFormatException e) {
+        } catch (Exception e) {
 
             e.printStackTrace();
             maxTimeoutCount = 10;
@@ -48,7 +53,7 @@ public class HeartbeatUpdater implements Runnable {
     }
 
     public HeartbeatUpdater() {
-
+        runtimeControlMsg = RuntimeControlMsg.getRuntimeControlMsg();
         heartbeatMsgList = new ArrayList<>();
         messageQueue = new HeartbeatMsgQueue();
         myLock = new ReentrantLock();
@@ -58,7 +63,7 @@ public class HeartbeatUpdater implements Runnable {
     @Override
     public void run() {
 
-        while (true) {
+        while (runtimeControlMsg.isHeartbeatUpdating()) {
 
             try {
 
@@ -71,14 +76,16 @@ public class HeartbeatUpdater implements Runnable {
             }
 
             try {
+
                 Thread.sleep(checkInterval * 10);
+
             } catch (InterruptedException e) {
+
                 e.printStackTrace();
             }
-
         }
-
     }
+
 
     private void updateHeartbeatMsg() {
 

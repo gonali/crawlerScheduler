@@ -14,6 +14,20 @@ public class Config {
 
     static {
 
+        try {
+            resourceBundle = ResourceBundle.getBundle("config");
+            mysqlHost = resourceBundle.getString("MYSQL_HOSTNAME");
+            mysqlPort = Integer.parseInt(resourceBundle.getString("MYSQL_PORT"));
+            mysqlDbName = resourceBundle.getString("MYSQL_DBNAME");
+            mysqlUsername = resourceBundle.getString("MYSQL_USER");
+            mysqlPassword = resourceBundle.getString("MYSQL_PASSWORD");
+            taskConfigTable = resourceBundle.getString("CRAWLER_CONF_TABLE");
+            taskTable = resourceBundle.getString("CRAWLER_TASK_TABLE");
+            taskSlaveTable = resourceBundle.getString("CRAWLER_SLAVE_TABLE");
+            taskUserTable = resourceBundle.getString("CRAWLER_USER_TABLE");
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -36,23 +50,10 @@ public class Config {
     public static Config getConfig() {
 
         try {
-            resourceBundle = ResourceBundle.getBundle("config");
-            mysqlHost = resourceBundle.getString("MYSQL_HOSTNAME");
-            mysqlPort = Integer.parseInt(resourceBundle.getString("MYSQL_PORT"));
-            mysqlDbName = resourceBundle.getString("MYSQL_DBNAME");
-            mysqlUsername = resourceBundle.getString("MYSQL_USER");
-            mysqlPassword = resourceBundle.getString("MYSQL_PASSWORD");
-            taskConfigTable = resourceBundle.getString("CRAWLER_CONFI_TABLE");
-            taskTable = resourceBundle.getString("CRAWLER_TASK_TABLE");
-            taskSlaveTable = resourceBundle.getString("CRAWLER_SLAVE_TABLE");
-            taskUserTable = resourceBundle.getString("CRAWLER_USER_TABLE");
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            taskConfig = (TaskConfigModel) (new TaskConfigModelDao().selectAll(taskConfigTable).get(0));
+            if (taskConfig == null)
+                taskConfig = (TaskConfigModel) (new TaskConfigModelDao().selectAll(taskConfigTable).get(0));
         } catch (Exception e) {
+
             e.printStackTrace();
         }
 

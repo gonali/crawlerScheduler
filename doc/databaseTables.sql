@@ -57,12 +57,12 @@ CREATE TABLE crawlerTaskSlaveTable(
 CREATE TABLE crawlerTaskConfigTable(
   configId INT NOT NULL AUTO_INCREMENT,
   redisHost VARCHAR(18),
-  redisPort INT,
+  redisPort INT DEFAULT 6379,
   maxTaskQueueSize INT,
   maxTaskRun INT,
   maxHeartbeatTimeoutCount INT,
   slaveHeartbeatInterval INT,
   slaveAppScript VARCHAR(512) DEFAULT 'crawlerStart.sh',
-  adminPassword VARCHAR(512)
+  adminPassword VARCHAR(512),
   PRIMARY KEY (configId)
 );

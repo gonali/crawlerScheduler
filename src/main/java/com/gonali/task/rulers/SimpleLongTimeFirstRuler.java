@@ -81,7 +81,7 @@ public class SimpleLongTimeFirstRuler extends RulerBase {
         return currentTasks;
     }
 
-/*    private void cleanInQueueTaskId() {
+    /* private void cleanInQueueTaskId() {
 
         List<TaskModel> taskModelList = currentTasks.getCurrentTaskElements();
         for (TaskModel t : taskModelList) {

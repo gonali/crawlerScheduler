@@ -7,6 +7,18 @@
     </database-info>
     <case-sensitivity plain-identifiers="exact" quoted-identifiers="exact"/>
     <schema name="" catalog="wifi_ac"/>
+    <table name="crawlerTaskConfigTable" schema="" catalog="wifi_ac" type="TABLE">
+      <column name="configId" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="redisHost" sqlType="VARCHAR" precision="18" scale="0" nullable="true" jdbcType="12"/>
+      <column name="redisPort" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4" def="NjM3OQ=="/>
+      <column name="maxTaskQueueSize" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="maxTaskRun" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="maxHeartbeatTimeoutCount" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="slaveHeartbeatInterval" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="slaveAppScript" sqlType="VARCHAR" precision="512" scale="0" nullable="true" jdbcType="12" def="J2NyYXdsZXJTdGFydC5zaCc="/>
+      <column name="adminPassword" sqlType="VARCHAR" precision="512" scale="0" nullable="true" jdbcType="12"/>
+      <primary-key name="PRIMARY" columns="configId"/>
+    </table>
     <table name="crawlerTaskSlaveTable" schema="" catalog="wifi_ac" type="TABLE">
       <column name="slaveId" sqlType="VARCHAR" precision="64" scale="0" nullable="false" jdbcType="12"/>
       <column name="slaveUsername" sqlType="VARCHAR" precision="64" scale="0" nullable="true" jdbcType="12" def="J3NsYXZlJw=="/>
