@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<!--[if IE 9 ]>
+<html class="ie9"><![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>爬虫任务调度器</title>
+
+    <!-- Vendor CSS -->
+    <link href="vendors/bootgrid/jquery.bootgrid.min.css" rel="stylesheet">
+    <link href="vendors/bower_components/animate.css/animate.min.css" rel="stylesheet">
+    <link href="vendors/bower_components/sweetalert/dist/sweetalert-override.min.css" rel="stylesheet">
+    <link href="vendors/bower_components/material-design-iconic-font/css/material-design-iconic-font.min.css"
+          rel="stylesheet">
+    <link href="vendors/socicon/socicon.min.css" rel="stylesheet">
+
+    <!-- CSS -->
+    <link href="css/app.min.1.css" rel="stylesheet">
+    <link href="css/app.min.2.css" rel="stylesheet">
+</head>
+<body>
+<header id="header">
+    <ul class="header-inner">
+        <li id="menu-trigger" data-trigger="#sidebar">
+            <div class="line-wrap">
+                <div class="line top"></div>
+                <div class="line center"></div>
+                <div class="line bottom"></div>
+            </div>
+        </li>
+
+        <li class="logo hidden-xs">
+            <a href="index.html">任务队列状态</a>
+        </li>
+    </ul>
+</header>
+
+<section id="main">
+    <aside id="sidebar">
+        <div class="sidebar-inner c-overflow">
+
+            <ul class="main-menu">
+                <li class="active"><a href="index.html"><i class="md md-home"></i> 调度器状态 </a></li>
+                <li class="sub-menu">
+                    <a href=""><i class="md md-view-list"></i> 任务状态</a>
+                    <ul>
+                        <li><a href="queue-tables.html">队列状态</a></li>
+                        <li><a href="heartbeat-tables.html">心跳状态</a></li>
+                    </ul>
+                </li>
+                <li><a href="typography.html"><i class="md md-format-underline"></i> 调度控制</a></li>
+                <li><a href="#" onclick="do_logout()"><i class="md md-now-widgets"></i> 退 出</a></li>
+            </ul>
+        </div>
+    </aside>
+
+    <aside id="chat">
+
+        <div class="chat-search">
+            <div class="fg-line">
+                <input type="text" class="form-control" placeholder="Search People">
+            </div>
+        </div>
+
+    </aside>
+
+
+    <section id="content">
+        <div class="container">
+            <div class="block-header">
+                <h2>在队列中的任务</h2>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>Redis队列中的任务
+                        <small>下面的任务是处在Redis队列中等待爬取，在队列中的位置由入队列的时间得出，时间越早越靠近队列出口，每分钟自动更新表格.
+                        </small>
+                    </h2>
+                </div>
+
+                <div class="table-responsive">
+                    <table id="data-table-basic" class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th data-column-id="id" data-type="string">任务ID</th>
+                            <th data-column-id="sender">任务名称</th>
+                            <th data-column-id="received" data-type="datetime" data-order="desc">入队列时间</th>
+                        </tr>
+                        </thead>
+                        <tbody id="inQueue-tasks">
+                        <!-- 表格由JS写进来 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>
+
+<footer id="footer">
+    Copyright &copy; 2015 Material Admin
+
+    <ul class="f-menu">
+        <li><a href="">Home</a></li>
+        <li><a href="">Dashboard</a></li>
+        <li><a href="">Reports</a></li>
+        <li><a href="">Support</a></li>
+        <li><a href="">Contact</a></li>
+    </ul>
+</footer>
+
+<!-- Older IE warning message -->
+<!--[if lt IE 9]>
+<div class="ie-warning">
+    <h1 class="c-white">Warning!!</h1>
+
+    <p>You are using an outdated version of Internet Explorer, please upgrade <br/>to any of the following web browsers
+        to access this website.</p>
+
+    <div class="iew-container">
+        <ul class="iew-download">
+            <li>
+                <a href="http://www.google.com/chrome/">
+                    <img src="img/browsers/chrome.png" alt="">
+
+                    <div>Chrome</div>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.mozilla.org/en-US/firefox/new/">
+                    <img src="img/browsers/firefox.png" alt="">
+
+                    <div>Firefox</div>
+                </a>
+            </li>
+            <li>
+                <a href="http://www.opera.com">
+                    <img src="img/browsers/opera.png" alt="">
+
+                    <div>Opera</div>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.apple.com/safari/">
+                    <img src="img/browsers/safari.png" alt="">
+
+                    <div>Safari</div>
+                </a>
+            </li>
+            <li>
+                <a href="http://windows.microsoft.com/en-us/internet-explorer/download-ie">
+                    <img src="img/browsers/ie.png" alt="">
+
+                    <div>IE (New)</div>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <p>Sorry for the inconvenience!</p>
+</div>
+<![endif]-->
+
+<!-- Javascript Libraries -->
+<script src="vendors/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="vendors/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+<script src="vendors/bower_components/jquery.nicescroll/jquery.nicescroll.min.js"></script>
+<script src="vendors/bower_components/Waves/dist/waves.min.js"></script>
+<script src="vendors/bootstrap-growl/bootstrap-growl.min.js"></script>
+<script src="vendors/bower_components/sweetalert/dist/sweetalert.min.js"></script>
+<script src="vendors/bootgrid/jquery.bootgrid.min.js"></script>
+
+<!-- Placeholder for IE9 -->
+<!--[if IE 9 ]>
+<script src="vendors/bower_components/jquery-placeholder/jquery.placeholder.min.js"></script>
+<![endif]-->
+
+<script src="js/functions.js"></script>
+<script src="js/demo.js"></script>
+
+<script src="js/logout.js"></script>
+<script src="js/getInQueueTask.js"></script>
+
+<!-- Data Table -->
+<!--<script type="text/javascript">
+    $(document).ready(function () {
+        //Basic Example
+        $("#data-table-basic").bootgrid({
+            css: {
+                icon: 'md icon',
+                iconColumns: 'md-view-module',
+                iconDown: 'md-expand-more',
+                iconRefresh: 'md-refresh',
+                iconUp: 'md-expand-less'
+            },
+        });
+
+        //Selection
+        $("#data-table-selection").bootgrid({
+            css: {
+                icon: 'md icon',
+                iconColumns: 'md-view-module',
+                iconDown: 'md-expand-more',
+                iconRefresh: 'md-refresh',
+                iconUp: 'md-expand-less'
+            },
+            selection: true,
+            multiSelect: true,
+            rowSelect: true,
+            keepSelection: true
+        });
+
+        //Command Buttons
+        $("#data-table-command").bootgrid({
+            css: {
+                icon: 'md icon',
+                iconColumns: 'md-view-module',
+                iconDown: 'md-expand-more',
+                iconRefresh: 'md-refresh',
+                iconUp: 'md-expand-less'
+            },
+            formatters: {
+                "commands": function (column, row) {
+                    return "<button type=\"button\" class=\"btn btn-icon command-edit\" data-row-id=\"" + row.id + "\"><span class=\"md md-edit\"></span></button> " +
+                            "<button type=\"button\" class=\"btn btn-icon command-delete\" data-row-id=\"" + row.id + "\"><span class=\"md md-delete\"></span></button>";
+                }
+            }
+        });
+    });
+</script>-->
+</body>
+</html>

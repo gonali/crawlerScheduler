@@ -10,7 +10,7 @@ $(document).ready(function(){
             className: 'btn-xs btn-inverse',
             placement: {
                 from: 'top',
-                align: 'right'
+                align: 'center'
             },
             delay: 2500,
             animate: {
@@ -25,6 +25,6 @@ $(document).ready(function(){
     };
     
     if (!$('.login-content')[0]) {
-        notify('Welcome back Mallinda Hollaway', 'inverse');
+        notify('欢迎回来 !', 'inverse');
     } 
 });

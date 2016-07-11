@@ -58,6 +58,7 @@
       <column name="taskStopTime" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="JzAwMDAtMDAtMDAgMDA6MDA6MDAn"/>
       <column name="taskCrawlerAmountInfo" sqlType="TEXT" precision="65535" scale="0" nullable="true" jdbcType="-1"/>
       <column name="taskCrawlerInstanceInfo" sqlType="TEXT" precision="65535" scale="0" nullable="true" jdbcType="-1"/>
+      <column name="taskName" sqlType="VARCHAR" precision="1024" scale="0" nullable="true" jdbcType="12"/>
       <primary-key name="PRIMARY" columns="taskId"/>
     </table>
     <table name="crawlerTaskUserTable" schema="" catalog="wifi_ac" type="TABLE">
