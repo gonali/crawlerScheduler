@@ -49,672 +49,66 @@
                         <li><a href="heartbeat-tables.html">心跳状态</a></li>
                     </ul>
                 </li>
-                <li><a href="typography.html"><i class="md md-format-underline"></i> 调度控制</a></li>
+                <li><a href="scheduler-control.html"><i class="md md-format-underline"></i> 调度控制</a></li>
                 <li><a href="#" onclick="do_logout()"><i class="md md-now-widgets"></i> 退 出</a></li>
             </ul>
         </div>
     </aside>
 
-    <aside id="chat">
-        <ul class="tab-nav tn-justified" role="tablist">
-            <li role="presentation" class="active"><a href="#friends" aria-controls="friends" role="tab"
-                                                      data-toggle="tab">Friends</a></li>
-            <li role="presentation"><a href="#online" aria-controls="online" role="tab" data-toggle="tab">Online Now</a>
-            </li>
-        </ul>
-
-        <div class="chat-search">
-            <div class="fg-line">
-                <input type="text" class="form-control" placeholder="Search People">
-            </div>
-        </div>
-
-        <div class="tab-content">
-            <div role="tabpanel" class="tab-pane fade in active" id="friends">
-                <div class="listview">
-                    <a class="lv-item" href="">
-                        <div class="media">
-                            <div class="pull-left p-relative">
-                                <img class="lv-img-sm" src="img/profile-pics/2.jpg" alt="">
-                                <i class="chat-status-busy"></i>
-                            </div>
-                            <div class="media-body">
-                                <div class="lv-title">Jonathan Morris</div>
-                                <small class="lv-small">Available</small>
-                            </div>
-                        </div>
-                    </a>
-
-                    <a class="lv-item" href="">
-                        <div class="media">
-                            <div class="pull-left">
-                                <img class="lv-img-sm" src="img/profile-pics/1.jpg" alt="">
-                            </div>
-                            <div class="media-body">
-                                <div class="lv-title">David Belle</div>
-                                <small class="lv-small">Last seen 3 hours ago</small>
-                            </div>
-                        </div>
-                    </a>
-
-                    <a class="lv-item" href="">
-                        <div class="media">
-                            <div class="pull-left p-relative">
-                                <img class="lv-img-sm" src="img/profile-pics/3.jpg" alt="">
-                                <i class="chat-status-online"></i>
-                            </div>
-                            <div class="media-body">
-                                <div class="lv-title">Fredric Mitchell Jr.</div>
-                                <small class="lv-small">Availble</small>
-                            </div>
-                        </div>
-                    </a>
-
-                    <a class="lv-item" href="">
-                        <div class="media">
-                            <div class="pull-left p-relative">
-                                <img class="lv-img-sm" src="img/profile-pics/4.jpg" alt="">
-                                <i class="chat-status-online"></i>
-                            </div>
-                            <div class="media-body">
-                                <div class="lv-title">Glenn Jecobs</div>
-                                <small class="lv-small">Availble</small>
-                            </div>
-                        </div>
-                    </a>
-
-                    <a class="lv-item" href="">
-                        <div class="media">
-                            <div class="pull-left">
-                                <img class="lv-img-sm" src="img/profile-pics/5.jpg" alt="">
-                            </div>
-                            <div class="media-body">
-                                <div class="lv-title">Bill Phillips</div>
-                                <small class="lv-small">Last seen 3 days ago</small>
-                            </div>
-                        </div>
-                    </a>
-
-                    <a class="lv-item" href="">
-                        <div class="media">
-                            <div class="pull-left">
-                                <img class="lv-img-sm" src="img/profile-pics/6.jpg" alt="">
-                            </div>
-                            <div class="media-body">
-                                <div class="lv-title">Wendy Mitchell</div>
-                                <small class="lv-small">Last seen 2 minutes ago</small>
-                            </div>
-                        </div>
-                    </a>
-                    <a class="lv-item" href="">
-                        <div class="media">
-                            <div class="pull-left p-relative">
-                                <img class="lv-img-sm" src="img/profile-pics/7.jpg" alt="">
-                                <i class="chat-status-busy"></i>
-                            </div>
-                            <div class="media-body">
-                                <div class="lv-title">Teena Bell Ann</div>
-                                <small class="lv-small">Busy</small>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <div role="tabpanel" class="tab-pane fade" id="online">
-                <div class="listview">
-                    <a class="lv-item" href="">
-                        <div class="media">
-                            <div class="pull-left p-relative">
-                                <img class="lv-img-sm" src="img/profile-pics/2.jpg" alt="">
-                                <i class="chat-status-busy"></i>
-                            </div>
-                            <div class="media-body">
-                                <div class="lv-title">Jonathan Morris</div>
-                                <small class="lv-small">Available</small>
-                            </div>
-                        </div>
-                    </a>
-
-                    <a class="lv-item" href="">
-                        <div class="media">
-                            <div class="pull-left p-relative">
-                                <img class="lv-img-sm" src="img/profile-pics/3.jpg" alt="">
-                                <i class="chat-status-online"></i>
-                            </div>
-                            <div class="media-body">
-                                <div class="lv-title">Fredric Mitchell Jr.</div>
-                                <small class="lv-small">Availble</small>
-                            </div>
-                        </div>
-                    </a>
-
-                    <a class="lv-item" href="">
-                        <div class="media">
-                            <div class="pull-left p-relative">
-                                <img class="lv-img-sm" src="img/profile-pics/4.jpg" alt="">
-                                <i class="chat-status-online"></i>
-                            </div>
-                            <div class="media-body">
-                                <div class="lv-title">Glenn Jecobs</div>
-                                <small class="lv-small">Availble</small>
-                            </div>
-                        </div>
-                    </a>
-
-                    <a class="lv-item" href="">
-                        <div class="media">
-                            <div class="pull-left p-relative">
-                                <img class="lv-img-sm" src="img/profile-pics/7.jpg" alt="">
-                                <i class="chat-status-busy"></i>
-                            </div>
-                            <div class="media-body">
-                                <div class="lv-title">Teena Bell Ann</div>
-                                <small class="lv-small">Busy</small>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </aside>
-
-
     <section id="content">
         <div class="container">
             <div class="block-header">
-                <h2>Table</h2>
-
-                <ul class="actions">
-                    <li>
-                        <a href="">
-                            <i class="md md-trending-up"></i>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="">
-                            <i class="md md-done-all"></i>
-                        </a>
-                    </li>
-                    <li class="dropdown">
-                        <a href="" data-toggle="dropdown">
-                            <i class="md md-more-vert"></i>
-                        </a>
-
-                        <ul class="dropdown-menu dropdown-menu-right">
-                            <li>
-                                <a href="">Refresh</a>
-                            </li>
-                            <li>
-                                <a href="">Manage Widgets</a>
-                            </li>
-                            <li>
-                                <a href="">Widgets Settings</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-
+                <h2>节点心跳信息表</h2>
             </div>
 
             <div class="card">
                 <div class="card-header">
-                    <h2>Basic Table
-                        <small>Basic example without any additional modification classes</small>
+                    <h2>心跳信息
+                        <small>以下为所有节点的心跳统计，每 10 秒更新.<p style="color: black; float: right">状态码说明： <a
+                                style="color: magenta">0 任务完成 </a><a>&nbsp;&nbsp;1 正在爬取 </a>&nbsp;&nbsp;3 心跳超时</p>
+                        </small>
                     </h2>
                 </div>
 
                 <div class="card-body table-responsive">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Username</th>
-                            <th>Nickname</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Alexandra</td>
-                            <td>Christopher</td>
-                            <td>@makinton</td>
-                            <td>Ducky</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Madeleine</td>
-                            <td>Hollaway</td>
-                            <td>@hollway</td>
-                            <td>Cheese</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Sebastian</td>
-                            <td>Johnston</td>
-                            <td>@sebastian</td>
-                            <td>Jaycee</td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>Mitchell</td>
-                            <td>Christin</td>
-                            <td>@mitchell4u</td>
-                            <td>AdskiDeAnus</td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td>Elizabeth</td>
-                            <td>Belkitt</td>
-                            <td>@belkitt</td>
-                            <td>Goat</td>
-                        </tr>
-                        <tr>
-                            <td>6</td>
-                            <td>Benjamin</td>
-                            <td>Parnell</td>
-                            <td>@wayne234</td>
-                            <td>Pokie</td>
-                        </tr>
-                        <tr>
-                            <td>7</td>
-                            <td>Katherine</td>
-                            <td>Buckland</td>
-                            <td>@anitabelle</td>
-                            <td>Wokie</td>
-                        </tr>
-                        <tr>
-                            <td>8</td>
-                            <td>Nicholas</td>
-                            <td>Walmart</td>
-                            <td>@mwalmart</td>
-                            <td>Spike</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <h2>Striped rows
-                        <small>Add zebra-striping to any table row within the tbody</small>
-                    </h2>
-                </div>
-
-                <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Username</th>
-                            <th>Nickname</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Alexandra</td>
-                            <td>Christopher</td>
-                            <td>@makinton</td>
-                            <td>Ducky</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Madeleine</td>
-                            <td>Hollaway</td>
-                            <td>@hollway</td>
-                            <td>Cheese</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Sebastian</td>
-                            <td>Johnston</td>
-                            <td>@sebastian</td>
-                            <td>Jaycee</td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>Mitchell</td>
-                            <td>Christin</td>
-                            <td>@mitchell4u</td>
-                            <td>AdskiDeAnus</td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td>Elizabeth</td>
-                            <td>Belkitt</td>
-                            <td>@belkitt</td>
-                            <td>Goat</td>
-                        </tr>
-                        <tr>
-                            <td>6</td>
-                            <td>Benjamin</td>
-                            <td>Parnell</td>
-                            <td>@wayne234</td>
-                            <td>Pokie</td>
-                        </tr>
-                        <tr>
-                            <td>7</td>
-                            <td>Katherine</td>
-                            <td>Buckland</td>
-                            <td>@anitabelle</td>
-                            <td>Wokie</td>
-                        </tr>
-                        <tr>
-                            <td>8</td>
-                            <td>Nicholas</td>
-                            <td>Walmart</td>
-                            <td>@mwalmart</td>
-                            <td>Spike</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <h2>Bordered table
-                        <small>Tables with borders on all possible sides of the Table and Cells</small>
-                    </h2>
-                </div>
-
-                <div class="table-responsive">
-                    <table class="table table-bordered">
-                        <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Username</th>
-                            <th>Nickname</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Alexandra</td>
-                            <td>Christopher</td>
-                            <td>@makinton</td>
-                            <td>Ducky</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Madeleine</td>
-                            <td>Hollaway</td>
-                            <td>@hollway</td>
-                            <td>Cheese</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Sebastian</td>
-                            <td>Johnston</td>
-                            <td>@sebastian</td>
-                            <td>Jaycee</td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>Mitchell</td>
-                            <td>Christin</td>
-                            <td>@mitchell4u</td>
-                            <td>AdskiDeAnus</td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td>Elizabeth</td>
-                            <td>Belkitt</td>
-                            <td>@belkitt</td>
-                            <td>Goat</td>
-                        </tr>
-                        <tr>
-                            <td>6</td>
-                            <td>Benjamin</td>
-                            <td>Parnell</td>
-                            <td>@wayne234</td>
-                            <td>Pokie</td>
-                        </tr>
-                        <tr>
-                            <td>7</td>
-                            <td>Katherine</td>
-                            <td>Buckland</td>
-                            <td>@anitabelle</td>
-                            <td>Wokie</td>
-                        </tr>
-                        <tr>
-                            <td>8</td>
-                            <td>Nicholas</td>
-                            <td>Walmart</td>
-                            <td>@mwalmart</td>
-                            <td>Spike</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <h2>Hover Row
-                        <small>Enable a hover state on table rows within a tbody</small>
-                    </h2>
-                </div>
-
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Username</th>
-                            <th>Nickname</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Alexandra</td>
-                            <td>Christopher</td>
-                            <td>@makinton</td>
-                            <td>Ducky</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Madeleine</td>
-                            <td>Hollaway</td>
-                            <td>@hollway</td>
-                            <td>Cheese</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Sebastian</td>
-                            <td>Johnston</td>
-                            <td>@sebastian</td>
-                            <td>Jaycee</td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>Mitchell</td>
-                            <td>Christin</td>
-                            <td>@mitchell4u</td>
-                            <td>AdskiDeAnus</td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td>Elizabeth</td>
-                            <td>Belkitt</td>
-                            <td>@belkitt</td>
-                            <td>Goat</td>
-                        </tr>
-                        <tr>
-                            <td>6</td>
-                            <td>Benjamin</td>
-                            <td>Parnell</td>
-                            <td>@wayne234</td>
-                            <td>Pokie</td>
-                        </tr>
-                        <tr>
-                            <td>7</td>
-                            <td>Katherine</td>
-                            <td>Buckland</td>
-                            <td>@anitabelle</td>
-                            <td>Wokie</td>
-                        </tr>
-                        <tr>
-                            <td>8</td>
-                            <td>Nicholas</td>
-                            <td>Walmart</td>
-                            <td>@mwalmart</td>
-                            <td>Spike</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <h2>Table Condensed
-                        <small>Make tables more compact by cutting cell padding in half.</small>
-                    </h2>
-                </div>
-
-                <div class="table-responsive">
-                    <table class="table table-condensed">
-                        <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Username</th>
-                            <th>Nickname</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Alexandra</td>
-                            <td>Christopher</td>
-                            <td>@makinton</td>
-                            <td>Ducky</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Madeleine</td>
-                            <td>Hollaway</td>
-                            <td>@hollway</td>
-                            <td>Cheese</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Sebastian</td>
-                            <td>Johnston</td>
-                            <td>@sebastian</td>
-                            <td>Jaycee</td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>Mitchell</td>
-                            <td>Christin</td>
-                            <td>@mitchell4u</td>
-                            <td>AdskiDeAnus</td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td>Elizabeth</td>
-                            <td>Belkitt</td>
-                            <td>@belkitt</td>
-                            <td>Goat</td>
-                        </tr>
-                        <tr>
-                            <td>6</td>
-                            <td>Benjamin</td>
-                            <td>Parnell</td>
-                            <td>@wayne234</td>
-                            <td>Pokie</td>
-                        </tr>
-                        <tr>
-                            <td>7</td>
-                            <td>Katherine</td>
-                            <td>Buckland</td>
-                            <td>@anitabelle</td>
-                            <td>Wokie</td>
-                        </tr>
-                        <tr>
-                            <td>8</td>
-                            <td>Nicholas</td>
-                            <td>Walmart</td>
-                            <td>@mwalmart</td>
-                            <td>Spike</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <h2>Contextual classes
-                        <small>Use contextual classes to color table rows or individual cells.</small>
-                    </h2>
-                </div>
-
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Username</th>
-                            <th>Nickname</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr class="active">
-                            <td>1</td>
-                            <td>Alexandra</td>
-                            <td>Christopher</td>
-                            <td>@makinton</td>
-                            <td>Ducky</td>
-                        </tr>
-                        <tr class="info">
-                            <td>3</td>
-                            <td>Sebastian</td>
-                            <td>Johnston</td>
-                            <td>@sebastian</td>
-                            <td>Jaycee</td>
-                        </tr>
-                        <tr class="warning">
-                            <td>4</td>
-                            <td>Mitchell</td>
-                            <td>Christin</td>
-                            <td>@mitchell4u</td>
-                            <td>AdskiDeAnus</td>
-                        </tr>
                         <tr class="success">
-                            <td>2</td>
-                            <td>Madeleine</td>
-                            <td>Hollaway</td>
-                            <td>@hollway</td>
-                            <td>Cheese</td>
+                            <th>序号</th>
+                            <th>任务 ID</th>
+                            <th>节点 IP</th>
+                            <th>进程 PID</th>
+                            <th>线程数</th>
+                            <th>状态码</th>
+                            <th>超时计数</th>
+                            <th>心跳时间</th>
                         </tr>
-                        <tr class="danger">
-                            <td>5</td>
-                            <td>Elizabeth</td>
-                            <td>Belkitt</td>
-                            <td>@belkitt</td>
-                            <td>Goat</td>
+                        </thead>
+                        <tbody id="heartbeat-table">
+                        <tr>
+                            <td>1</td>
+                            <td>123456789</td>
+                            <td>192.168.10.20</td>
+                            <td>1201</td>
+                            <td>10</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>2016-07-12 09:50:23</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>987654321</td>
+                            <td>192.168.10.30</td>
+                            <td>2088</td>
+                            <td>10</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>2016-07-12 09:53:08</td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
-
         </div>
     </section>
 </section>
@@ -801,6 +195,7 @@
 <script src="js/demo.js"></script>
 
 <script src="js/logout.js"></script>
+<script src="js/getHeartbeatInfo.js"></script>
 
 </body>
 </html>

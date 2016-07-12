@@ -11,7 +11,7 @@ public class HeartbeatMsgModel implements Message {
     private String taskId;
     private String hostname;//IP
     private int    pid;
-    private int    theads;
+    private int    threads;
     private long   time;
     private int    statusCode;
     private int    timeoutCount;
@@ -21,7 +21,7 @@ public class HeartbeatMsgModel implements Message {
         taskId = "";
         hostname = "";
         pid = -1;
-        theads = 1;
+        threads = 1;
         statusCode = -1;
         timeoutCount = 0;
     }
@@ -53,12 +53,12 @@ public class HeartbeatMsgModel implements Message {
         return this;
     }
 
-    public int getTheads() {
-        return theads;
+    public int getThreads() {
+        return threads;
     }
 
-    public HeartbeatMsgModel setTheads(int theads) {
-        this.theads = theads;
+    public HeartbeatMsgModel setThreads(int threads) {
+        this.threads = threads;
         return this;
     }
 

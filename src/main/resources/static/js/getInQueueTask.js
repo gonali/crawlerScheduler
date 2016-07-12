@@ -50,7 +50,7 @@ function tableAction() {
     });
 
     //Selection
-    $("#data-table-selection").bootgrid({
+    /*$("#data-table-selection").bootgrid({
         css: {
             icon: 'md icon',
             iconColumns: 'md-view-module',
@@ -62,10 +62,10 @@ function tableAction() {
         multiSelect: true,
         rowSelect: true,
         keepSelection: true
-    });
+    });*/
 
     //Command Buttons
-    $("#data-table-command").bootgrid({
+    /*$("#data-table-command").bootgrid({
         css: {
             icon: 'md icon',
             iconColumns: 'md-view-module',
@@ -79,7 +79,7 @@ function tableAction() {
                     "<button type=\"button\" class=\"btn btn-icon command-delete\" data-row-id=\"" + row.id + "\"><span class=\"md md-delete\"></span></button>";
             }
         }
-    });
+    });*/
 }
 
 function getInQueueTask() {

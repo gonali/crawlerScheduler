@@ -10,9 +10,15 @@ function do_logout() {
         data: {},
         dataType: "json",
         beforeSend: function () {
-
-            if (!confirm("确定退出？"))
-                return false;
+            swal({
+                title: "确定退出?",
+                text: "退出登录警告!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes",
+                closeOnConfirm: false
+            })
         },
         success: function (data) {
 

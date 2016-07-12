@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<!--[if IE 9 ]>
+<html class="ie9"><![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>爬虫任务调度器</title>
+
+    <!--<link href="css/bootstrap.css" rel="stylesheet">-->
+    <!-- Vendor CSS -->
+    <link href="vendors/bootgrid/jquery.bootgrid.min.css" rel="stylesheet">
+    <link href="vendors/bower_components/animate.css/animate.min.css" rel="stylesheet">
+    <link href="vendors/bower_components/sweetalert/dist/sweetalert-override.min.css" rel="stylesheet">
+    <link href="vendors/bower_components/material-design-iconic-font/css/material-design-iconic-font.min.css"
+          rel="stylesheet">
+    <link href="vendors/socicon/socicon.min.css" rel="stylesheet">
+
+    <!-- CSS -->
+    <link href="css/app.min.1.css" rel="stylesheet">
+    <link href="css/app.min.2.css" rel="stylesheet">
+
+    <style type="text/css">
+        .notifications .btn {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+    </style>
+
+</head>
+<body>
+<header id="header">
+    <ul class="header-inner">
+        <li id="menu-trigger" data-trigger="#sidebar">
+            <div class="line-wrap">
+                <div class="line top"></div>
+                <div class="line center"></div>
+                <div class="line bottom"></div>
+            </div>
+        </li>
+
+        <li class="logo hidden-xs">
+            <a href="index.html">调度控制中心</a>
+        </li>
+    </ul>
+</header>
+
+<section id="main">
+    <aside id="sidebar">
+        <div class="sidebar-inner c-overflow">
+
+            <ul class="main-menu">
+                <li class="active"><a href="index.html"><i class="md md-home"></i> 调度器状态 </a></li>
+                <li class="sub-menu">
+                    <a href=""><i class="md md-view-list"></i> 任务状态</a>
+
+                    <ul>
+                        <li><a href="queue-tables.html">队列状态</a></li>
+                        <li><a href="heartbeat-tables.html">心跳状态</a></li>
+                    </ul>
+                </li>
+                <li><a href="scheduler-control.html"><i class="md md-format-underline"></i> 调度控制</a></li>
+                <li><a href="#" onclick="do_logout()"><i class="md md-now-widgets"></i> 退 出</a></li>
+            </ul>
+        </div>
+    </aside>
+
+    <section id="content">
+        <div class="container">
+            <div class="card">
+
+                <div class="card-body card-padding">
+                    <div class="block-header">
+                        <h2>调度器运行状态 |=== +++ === +++ === +++ === +++ === +++ === +++ === +++ ===|</h2>
+                        <ul class="actions">
+                            <li class="dropdown">
+                                <a href="" data-toggle="dropdown"
+                                   class="btn bgm-amber btn-icon waves-effect waves-circle waves-float">
+                                    <i class="md md-more-vert"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-right">
+                                    <li>
+                                        <button id="scheduler-start" class="btn btn-success"
+                                                style="margin: 5%  auto 5% 20%">启动调度器
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button id="scheduler-stop" class="btn btn-danger"
+                                                style="margin: 5% auto 5% 20%">停止调度器
+                                        </button>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="notifications row block-header">
+                        <div class="col-sm-2 col-xs-6">
+                            <a id="state-bar-running" class="btn btn-success" data-type="success"
+                               style="background-color: green">正在运行</a>
+                        </div>
+                        <div class="col-sm-2 col-xs-6">
+                            <a id="state-bar-waiting" class="btn btn-warning" data-type="warning"
+                               style="background-color: darkorange">等待队列任务完成</a>
+                        </div>
+                        <div class="col-sm-2 col-xs-6">
+                            <a id="state-bar-stop" class="btn btn-danger" data-type="danger"
+                               style="background-color: red">调度停止</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>调度器配置信息
+                        <button class="btn bgm-lightgreen waves-effect" style="float: right"><i class="md md-menu"></i>
+                        </button>
+                    </h2>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-striped" style="margin-bottom: 5%">
+                        <thead>
+                        <tr class="success">
+                            <th>项目</th>
+                            <th>Id</th>
+                            <th>Redis服务器IP</th>
+                            <th>Redis服务器端口</th>
+                            <th>最大任务队列</th>
+                            <th>最大任务数</th>
+                            <th>最大心跳超时计数</th>
+                            <th>APP启动脚本</th>
+                            <th>后台管理密码</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <th>调度器配置</th>
+                            <th>1</th>
+                            <th>127.0.0.1</th>
+                            <th>6379</th>
+                            <th>60</th>
+                            <th>10</th>
+                            <th>150</th>
+                            <th>$HOME/crawlerStart.sh</th>
+                            <th>ac45fe51789b2dfcc03</th>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>节点配置信息
+                        <button class="btn btn-success btn-icon waves-effect waves-circle waves-float"
+                                style="float: right"><i
+                                class="md md-more-vert"></i></button>
+                    </h2>
+                </div>
+
+                <table id="slave-table-command" class="table table-striped table-vmiddle">
+                    <thead>
+                    <tr class="info">
+                        <th data-column-id="id">节点 ID</th>
+                        <th data-column-id="slave-ip">节点 IP</th>
+                        <th data-column-id="slave-port">SSH 端口</th>
+                        <th data-column-id="slave-user">用户名</th>
+                        <th data-column-id="slave-password">密 码</th>
+                        <th data-column-id="slave-app-path">APP 目录</th>
+                        <th data-column-id="commands" data-formatter="commands" data-sortable="false">编辑</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>1001</td>
+                        <td>192.168.20.30</td>
+                        <td>22</td>
+                        <td>slave</td>
+                        <td>slave</td>
+                        <td>$HOME/crawler</td>
+                    </tr>
+                    <tr>
+                        <td>1002</td>
+                        <td>192.168.20.40</td>
+                        <td>22</td>
+                        <td>slave</td>
+                        <td>slave</td>
+                        <td>$HOME/crawler</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>任务配置信息
+                        <button class="btn bgm-gray btn-icon waves-effect waves-circle waves-float"
+                                style="float: right"><i class="md md-trending-up"></i></button>
+                        </small>
+                    </h2>
+                </div>
+
+                <table id="task-table-command" class="table table-striped table-vmiddle">
+                    <thead>
+                    <tr class="danger">
+                        <th data-column-id="id" data-type="string">任务 ID</th>
+                        <th data-column-id="user-id">用户 ID</th>
+                        <th data-column-id="task-name">任务名称</th>
+                        <th data-column-id="task-type">任务类型</th>
+                        <th data-column-id="task-remark">任务备注</th>
+                        <th data-column-id="commands" data-formatter="commands" data-sortable="false">编辑任务</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>10238</td>
+                        <td>eduardo@pingpong.com</td>
+                        <td>14.10.2013</td>
+                    </tr>
+                    <tr>
+                        <td>10243</td>
+                        <td>eduardo@pingpong.com</td>
+                        <td>19.10.2013</td>
+                    </tr>
+                    <tr>
+                        <td>10248</td>
+                        <td>eduardo@pingpong.com</td>
+                        <td>24.10.2013</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</section>
+
+<footer id="footer">
+    Copyright &copy; 2015 Material Admin
+
+    <ul class="f-menu">
+        <li><a href="">Home</a></li>
+        <li><a href="">Dashboard</a></li>
+        <li><a href="">Reports</a></li>
+        <li><a href="">Support</a></li>
+        <li><a href="">Contact</a></li>
+    </ul>
+</footer>
+
+<!-- Older IE warning message -->
+<!--[if lt IE 9]>
+<div class="ie-warning">
+    <h1 class="c-white">Warning!!</h1>
+
+    <p>You are using an outdated version of Internet Explorer, please upgrade <br/>to any of the following web browsers
+        to access this website.</p>
+
+    <div class="iew-container">
+        <ul class="iew-download">
+            <li>
+                <a href="http://www.google.com/chrome/">
+                    <img src="img/browsers/chrome.png" alt="">
+
+                    <div>Chrome</div>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.mozilla.org/en-US/firefox/new/">
+                    <img src="img/browsers/firefox.png" alt="">
+
+                    <div>Firefox</div>
+                </a>
+            </li>
+            <li>
+                <a href="http://www.opera.com">
+                    <img src="img/browsers/opera.png" alt="">
+
+                    <div>Opera</div>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.apple.com/safari/">
+                    <img src="img/browsers/safari.png" alt="">
+
+                    <div>Safari</div>
+                </a>
+            </li>
+            <li>
+                <a href="http://windows.microsoft.com/en-us/internet-explorer/download-ie">
+                    <img src="img/browsers/ie.png" alt="">
+
+                    <div>IE (New)</div>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <p>Sorry for the inconvenience!</p>
+</div>
+<![endif]-->
+
+
+<!-- Javascript Libraries -->
+<script src="vendors/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="vendors/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+<script src="vendors/bower_components/jquery.nicescroll/jquery.nicescroll.min.js"></script>
+<script src="vendors/bower_components/Waves/dist/waves.min.js"></script>
+<script src="vendors/bootstrap-growl/bootstrap-growl.min.js"></script>
+<script src="vendors/bower_components/sweetalert/dist/sweetalert.min.js"></script>
+<script src="vendors/bootgrid/jquery.bootgrid.min.js"></script>
+
+<!-- Placeholder for IE9 -->
+<!--[if IE 9 ]>
+<script src="vendors/bower_components/jquery-placeholder/jquery.placeholder.min.js"></script>
+<![endif]-->
+
+<script src="js/functions.js"></script>
+<script src="js/demo.js"></script>
+<!--<script src="js/bootstrap.min.js"></script>-->
+
+<script src="js/logout.js"></script>
+<script src="js/getHeartbeatInfo.js"></script>
+
+<!-- Data Table -->
+<script type="text/javascript">
+    $(document).ready(function () {
+        //slave table
+        $("#slave-table-command").bootgrid({
+            css: {
+                icon: 'md icon',
+                iconColumns: 'md-view-module',
+                iconDown: 'md-expand-more',
+                iconRefresh: 'md-refresh',
+                iconUp: 'md-expand-less'
+            },
+            formatters: {
+                "commands": function (column, row) {
+                    return "<button type=\"button\" class=\"btn btn-icon command-edit\" data-row-id=\"" + row.id + "\"><span class=\"md md-edit\"></span></button> " +
+                            "<button type=\"button\" class=\"btn btn-icon command-delete\" data-row-id=\"" + row.id + "\"><span class=\"md md-delete\"></span></button>";
+                }
+            }
+        });
+
+        //task table
+        $("#task-table-command").bootgrid({
+            css: {
+                icon: 'md icon',
+                iconColumns: 'md-view-module',
+                iconDown: 'md-expand-more',
+                iconRefresh: 'md-refresh',
+                iconUp: 'md-expand-less'
+            },
+            formatters: {
+                "commands": function (column, row) {
+                    return "<button type=\"button\" class=\"btn btn-default btn-icon  waves-circle \" data-row-id=\"" + row.id + "\"><span class=\"md md-apps\"></span></button> " +
+                            "<button type=\"button\" class=\"btn btn-icon command-edit\" data-row-id=\"" + row.id + "\"><span class=\"md md-edit\"></span></button> " +
+                            "<button type=\"button\" class=\"btn btn-icon command-delete\" data-row-id=\"" + row.id + "\"><span class=\"md md-delete\"></span></button>";
+                }
+            }
+        });
+
+    });
+</script>
+
+</body>
+</html>

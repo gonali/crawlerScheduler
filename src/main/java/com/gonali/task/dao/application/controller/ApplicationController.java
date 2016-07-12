@@ -8,6 +8,7 @@ import com.gonali.task.dao.config.Config;
 import com.gonali.task.dao.dao.TaskSlaveModelDao;
 import com.gonali.task.dao.message.RuntimeControlMsg;
 import com.gonali.task.dao.model.EntityModel;
+import com.gonali.task.dao.model.HeartbeatMsgModel;
 import com.gonali.task.dao.model.TaskModel;
 import com.gonali.task.dao.scheduler.TaskScheduler;
 import com.gonali.task.dao.utils.MD5Utils;
@@ -251,4 +252,32 @@ public class ApplicationController {
 
         return jsonArray.toJSONString();
     }
+
+
+    @RequestMapping("getHeartbeatInfo")
+    public String getHeartbeatInfo(){
+
+        List<HeartbeatMsgModel> heartbeatMsgModelList = scheduler.getHeartbeatUpdater().getHeartbeatMsgList();
+        JSONArray jsonArray = new JSONArray();
+        JSONObject jsonObject;
+
+        for (HeartbeatMsgModel h : heartbeatMsgModelList){
+
+            jsonObject = new JSONObject();
+            jsonObject.put("taskId", h.getTaskId());
+            jsonObject.put("host", h.getHostname());
+            jsonObject.put("pid", h.getPid());
+            jsonObject.put("threads", h.getThreads());
+            jsonObject.put("statusCode", h.getStatusCode());
+            jsonObject.put("timeoutCount", h.getTimeoutCount());
+            jsonObject.put("time", new SimpleDateFormat("YYYY-MM-dd HH:mm:ss").format(new Date(h.getTime())));
+
+            jsonArray.add(jsonObject);
+        }
+
+        return jsonArray.toJSONString();
+    }
+
+
+
 }
