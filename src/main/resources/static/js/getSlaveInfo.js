@@ -54,7 +54,7 @@ function getSlaveInfo() {
 
     $.ajax({
         type: "POST",
-        url: "/api/slaveInfo",
+        url: "/api/getAllSlaveInfo",
         data: {},
         dataType: "json",
         beforeSend: function () {

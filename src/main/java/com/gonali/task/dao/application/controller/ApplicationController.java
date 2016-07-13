@@ -5,11 +5,11 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.gonali.task.dao.application.model.ResponseStatus;
 import com.gonali.task.dao.config.Config;
+import com.gonali.task.dao.dao.TaskConfigModelDao;
+import com.gonali.task.dao.dao.TaskModelDao;
 import com.gonali.task.dao.dao.TaskSlaveModelDao;
 import com.gonali.task.dao.message.RuntimeControlMsg;
-import com.gonali.task.dao.model.EntityModel;
-import com.gonali.task.dao.model.HeartbeatMsgModel;
-import com.gonali.task.dao.model.TaskModel;
+import com.gonali.task.dao.model.*;
 import com.gonali.task.dao.scheduler.TaskScheduler;
 import com.gonali.task.dao.utils.MD5Utils;
 import com.gonali.task.dao.utils.SessionUtils;
@@ -83,20 +83,6 @@ public class ApplicationController {
     public String taskStatus(HttpServletRequest request) {
 
         return "{status}";
-    }
-
-
-    @RequestMapping("slaveInfo")
-    public String slaveInfo() {
-
-        try {
-            List<EntityModel> slaveList = new TaskSlaveModelDao().selectAll(config.getTaskSlaveTable());
-
-            return JSON.toJSONString(slaveList);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
 
@@ -255,13 +241,13 @@ public class ApplicationController {
 
 
     @RequestMapping("getHeartbeatInfo")
-    public String getHeartbeatInfo(){
+    public String getHeartbeatInfo() {
 
         List<HeartbeatMsgModel> heartbeatMsgModelList = scheduler.getHeartbeatUpdater().getHeartbeatMsgList();
         JSONArray jsonArray = new JSONArray();
         JSONObject jsonObject;
 
-        for (HeartbeatMsgModel h : heartbeatMsgModelList){
+        for (HeartbeatMsgModel h : heartbeatMsgModelList) {
 
             jsonObject = new JSONObject();
             jsonObject.put("taskId", h.getTaskId());
@@ -278,6 +264,169 @@ public class ApplicationController {
         return jsonArray.toJSONString();
     }
 
+
+    @RequestMapping("getRuntimeControlMsg")
+    public String getRuntimeControlMsg() {
+
+        try {
+            return JSON.toJSONString(scheduler.getRuntimeControlMsg());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "{}";
+    }
+
+    /**
+     * @return json string
+     * <p/>
+     * {
+     * "adminPassword":"21232f297a57a5a743894a0e4a801fc3",
+     * "configId":1,
+     * "maxHeartbeatTimeoutCount":30,
+     * "maxTaskQueueSize":10,
+     * "maxTaskRun":3,
+     * "primaryKey":"1",
+     * "redisHost":"110.110.10.100",
+     * "redisPort":6379,
+     * "slaveAppScript":"./crawlerStart.sh",
+     * "slaveHeartbeatInterval":10
+     * }
+     */
+    @RequestMapping("getSchedulerConfig")
+    public String getSchedulerConfig() {
+
+        try {
+            EntityModel configModel = new TaskConfigModelDao().selectAll(config.getTaskConfigTable()).get(0);
+            return JSON.toJSONString(configModel);
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+
+        return "{}";
+    }
+
+    @RequestMapping("getAllTaskShortcut")
+    public String getAllTaskShortcut() {
+
+        try {
+            JSONArray jsonArray = new JSONArray();
+            JSONObject jsonObject;
+
+            List<EntityModel> taskList = new TaskModelDao().selectAll(config.getTaskTable());
+            int size = taskList.size();
+            for (int i = 0; i < size; i++) {
+
+                jsonObject = new JSONObject();
+                jsonObject.put("taskId", ((TaskModel) taskList.get(i)).getTaskId());
+                jsonObject.put("userId", ((TaskModel) taskList.get(i)).getUserId());
+                jsonObject.put("taskName", ((TaskModel) taskList.get(i)).getTaskName());
+                jsonObject.put("taskType", ((TaskModel) taskList.get(i)).getTaskType());
+                jsonObject.put("taskRemark", ((TaskModel) taskList.get(i)).getTaskRemark());
+
+                jsonArray.add(jsonObject);
+
+            }
+            return jsonArray.toJSONString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return "[]";
+    }
+
+    /**
+     * @return json string
+     * json format
+     * <p/>
+     * [
+     * {
+     * "slaveAppPath":"~/",
+     * "slaveId":"1",
+     * "slaveIp":"110.110.10.101",
+     * "slavePassword":"crawler",
+     * "slaveSshPort":22,
+     * "slaveUsername":"crawler"
+     * },
+     * ... ...
+     * ]
+     */
+    @RequestMapping("getAllSlaveInfo")
+    public String getAllSlaveInfo() {
+
+        try {
+            List<EntityModel> slaveList = new TaskSlaveModelDao().selectAll(config.getTaskSlaveTable());
+
+            return JSON.toJSONString(slaveList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    @RequestMapping("getEditSlave")
+    public String getEditSlave(HttpServletRequest request) {
+
+        try {
+            String slaveId = request.getParameter("slaveId");
+            TaskSlaveModelDao dao = new TaskSlaveModelDao();
+            EntityModel slave = dao.selectById(config.getTaskSlaveTable(), slaveId);
+            return JSON.toJSONString(slave);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return "{}";
+    }
+
+
+    @RequestMapping("updateSlave")
+    public String updateSlave(HttpServletRequest request) {
+
+        try {
+            TaskSlaveModel slave = new TaskSlaveModel();
+            String slaveId = request.getParameter("slaveId");
+            String slaveIp = request.getParameter("slaveIp");
+            String slaveSshPort = request.getParameter("slaveSshPort");
+            String slaveUsername = request.getParameter("slaveUsername");
+            String slavePassword = request.getParameter("slavePassword");
+            String slaveAppPath = request.getParameter("slaveAppPath");
+
+            if (slaveId == null) {
+
+                return new ResponseStatus()
+                        .setStatus(false)
+                        .setIsRedirect(true)
+                        .setLocation("index.html")
+                        .toString();
+            }
+
+            slave.setSlaveId(slaveId);
+            slave.setSlaveIp(slaveIp);
+            slave.setSlaveUsername(slaveUsername);
+            slave.setSlavePassword(slavePassword);
+            slave.setSlaveSshPort(Integer.parseInt(slaveSshPort));
+            slave.setSlaveAppPath(slaveAppPath);
+
+            TaskSlaveModelDao dao = new TaskSlaveModelDao();
+
+            int ret = dao.update(config.getTaskSlaveTable(), slave);
+            if (ret > 0)
+                return new ResponseStatus()
+                        .setStatus(true)
+                        .toString();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return new ResponseStatus()
+                .setStatus(false)
+                .setIsRedirect(true)
+                .setLocation("index.html")
+                .toString();
+    }
 
 
 }

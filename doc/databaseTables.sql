@@ -51,6 +51,7 @@ CREATE TABLE crawlerTaskSlaveTable(
   slaveIp       VARCHAR(18) DEFAULT '127.0.0.1',
   slaveSshPort int DEFAULT 22,
   slaveAppPath VARCHAR(1024) DEFAULT '~/',
+  UNIQUE KEY (slaveIp, slaveUsername),
   PRIMARY KEY (slaveId)
 );
 

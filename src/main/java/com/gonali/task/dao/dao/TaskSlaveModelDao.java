@@ -47,6 +47,20 @@ public class TaskSlaveModelDao implements QueryDao {
     }
 
 
+    public EntityModel selectById(String tableName, String id) {
+        try {
+            String sql = "SELECT * FROM " + tableName + " WHERE slaveId = '" + id + "'";
+            mysqlClient.getConnection();
+            ResultSet rs = mysqlClient.executeQuerySql(sql);
+            return boxingObject(rs).get(0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            mysqlClient.closeConnection();
+        }
+        return null;
+    }
+
     @Override
     public int insert(String tableName, EntityModel model) {
 
@@ -59,7 +73,7 @@ public class TaskSlaveModelDao implements QueryDao {
         } catch (SQLException e) {
 
             e.printStackTrace();
-        }finally {
+        } finally {
 
             mysqlClient.closeConnection();
         }
@@ -74,7 +88,7 @@ public class TaskSlaveModelDao implements QueryDao {
         } catch (SQLException e) {
 
             e.printStackTrace();
-        }finally {
+        } finally {
             mysqlClient.closeConnection();
         }
         return 0;
@@ -99,7 +113,7 @@ public class TaskSlaveModelDao implements QueryDao {
             return boxingObject(rs);
         } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             mysqlClient.closeConnection();
         }
         return null;
