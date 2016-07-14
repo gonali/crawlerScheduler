@@ -32,7 +32,7 @@ public class SessionUtils {
             username = null;
             password = null;
             sessionTime = 0;
-            e.printStackTrace();
+            //e.printStackTrace();
         }
 
         if (username == null || password == null)

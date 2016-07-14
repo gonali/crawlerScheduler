@@ -54,7 +54,6 @@ function get_scheduler_state() {
 }
 
 function scheduler_start_btn() {
-
     var state = $('#state-value-hidden').val();
     if (state == 'err') {
 
@@ -68,7 +67,7 @@ function scheduler_start_btn() {
 
         return false;
     }
-    if (state != 'waiting' || state != 'stop') {
+    if (state != 'waiting' && state != 'stop') {
 
         swal({
             title: "调度器已经运行!",
@@ -80,6 +79,59 @@ function scheduler_start_btn() {
 
         return false;
     }
+
+    $.ajax({
+
+        type: "POST",
+        url: "/api/startScheduler",
+        data: {},
+        dataType: "json",
+        beforeSend: function () {
+
+        },
+        success: function (data) {
+
+            if (!data.status && data.isRedirect) {
+
+                window.location = data.location;
+                return false;
+            }
+
+            if (data.status) {
+                swal({
+                    title: "操作成功!",
+                    text: "成功消息.",
+                    type: 'success',
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+            } else {
+
+                swal({
+                    title: "操作错误!",
+                    text: "错误消息.",
+                    type: 'error',
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+            }
+        },
+        complete: function () {
+
+        },
+        error: function () {
+            swal({
+                title: "操作错误!",
+                text: "错误消息.",
+                type: 'error',
+                timer: 3000,
+                showConfirmButton: false
+            });
+        }
+
+    });
+
+    get_scheduler_state();
 }
 
 function scheduler_stop_btn() {
@@ -109,7 +161,73 @@ function scheduler_stop_btn() {
 
         return false;
     }
+
+    swal({
+        title: "确定停止调度?",
+        text: "停止调度警告!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes",
+        closeOnConfirm: false
+
+    }, function () {
+        $.ajax({
+
+            type: "POST",
+            url: "/api/stopScheduler",
+            data: {},
+            dataType: "json",
+            beforeSend: function () {
+
+            },
+            success: function (data) {
+
+                if (!data.status && data.isRedirect) {
+
+                    window.location = data.location;
+                    return false;
+                }
+
+                if (data.status) {
+                    swal({
+                        title: "操作成功!",
+                        text: "成功消息.",
+                        type: 'success',
+                        timer: 3000,
+                        showConfirmButton: false
+                    });
+                } else {
+
+                    swal({
+                        title: "操作错误!",
+                        text: "错误消息.",
+                        type: 'error',
+                        timer: 3000,
+                        showConfirmButton: false
+                    });
+                }
+            },
+            complete: function () {
+
+            },
+            error: function () {
+                swal({
+                    title: "操作错误!",
+                    text: "错误消息.",
+                    type: 'error',
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+            }
+
+        });
+    });
+
+    get_scheduler_state();
+
 }
+
 
 function get_scheduler_config() {
 
@@ -147,8 +265,9 @@ function get_scheduler_config() {
 
             $("#scheduler-config-table-body").html(theBody);
 
+            $('#scheduler-config-id').attr('value', data.configId);
             $('#scheduler-config-redis-ip').attr('value', data.redisHost);
-            $('#scheduler-config-redis-port').attr('value', data.redisHost);
+            $('#scheduler-config-redis-port').attr('value', data.redisPort);
             $('#scheduler-config-max-task-queue').attr('value', data.maxTaskQueueSize);
             $('#scheduler-config-max-task-run').attr('value', data.maxTaskRun);
             $('#scheduler-config-checkinterval').attr('value', data.slaveHeartbeatInterval);
@@ -164,10 +283,80 @@ function get_scheduler_config() {
 
 }
 
-function slave_add() {
-    alert("Hi, add")
 
-    //alert("Hi, update");
+function update_scheduler_config() {
+
+    $.ajax({
+        type: "POST",
+        url: "/api/updateSchedulerConfig",
+        data: {
+            configId: $('#scheduler-config-id').val(),
+            redisHost: $('#scheduler-config-redis-ip').val(),
+            redisPort: $('#scheduler-config-redis-port').val(),
+            maxTaskQueueSize: $('#scheduler-config-max-task-queue').val(),
+            maxTaskRun: $('#scheduler-config-max-task-run').val(),
+            maxHeartbeatTimeoutCount: $('#scheduler-config-checkinterval').val(),
+            slaveHeartbeatInterval: $('#scheduler-config-max-timeout-count').val(),
+            slaveAppScript: $('#scheduler-config-app-script').val(),
+            adminPassword: $('#scheduler-config-admin-password').val()
+        },
+        dataType: "json",
+        beforeSend: function () {
+
+        },
+        success: function (data) {
+
+            if (!data.status && data.isRedirect) {
+
+                window.location = data.location;
+                return false;
+            }
+
+            if (data.status) {
+                swal({
+                    title: "更新操作成功!",
+                    text: "成功消息.",
+                    type: 'success',
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+            } else {
+
+                swal({
+                    title: "更新操作错误!",
+                    text: "错误消息.",
+                    type: 'error',
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+            }
+            //delay(3000);
+            //window.location = 'scheduler-control.html';
+
+            $('#modal-config-info').modal('hide');
+        },
+        complete: function () {
+
+        },
+        error: function () {
+            swal({
+                title: "更新操作错误!",
+                text: "错误消息.",
+                type: 'error',
+                timer: 3000,
+                showConfirmButton: false
+            });
+
+            $('#modal-config-info').modal('hide');
+        }
+    });
+
+    get_scheduler_config();
+}
+
+
+function slave_add() {
+
     $.ajax({
         type: "POST",
         url: "/api/addSlave",
@@ -230,24 +419,24 @@ function slave_add() {
         }
     });
 
-
 }
 
 
 function slave_add_btn() {
 
-    $('#slave-id').attr('value', ''),
-        $('#slave-ip').attr('value', ''),
-        $('#slave-port').attr('value', ''),
-        $('#slave-username').attr('value', ''),
-        $('#slave-password').attr('value', ''),
-        $('#slave-app-path').attr('value', '')
+    $('#slave-id').attr('value', '');
+    $('#slave-ip').attr('value', '');
+    $('#slave-port').attr('value', '');
+    $('#slave-username').attr('value', '');
+    $('#slave-password').attr('value', '');
+    $('#slave-app-path').attr('value', '');
     $('#modal-slave-edit-title').html('添加节点');
     $('#modal-slave-edit-btn').html('添 加');
     $('#modal-slave-edit-btn').attr('onclick', 'slave_add()');
     $('#modal-slave-edit').modal('show');
 
 }
+
 
 function slave_edit_btn(row_id) {
 
@@ -268,12 +457,12 @@ function slave_edit_btn(row_id) {
                 window.location = data.location;
                 return false;
             }
-            $('#slave-id').attr('value', data.slaveId),
-                $('#slave-ip').attr('value', data.slaveIp),
-                $('#slave-port').attr('value', data.slaveSshPort),
-                $('#slave-username').attr('value', data.slaveUsername),
-                $('#slave-password').attr('value', data.slavePassword),
-                $('#slave-app-path').attr('value', data.slaveAppPath)
+            $('#slave-id').attr('value', data.slaveId);
+            $('#slave-ip').attr('value', data.slaveIp);
+            $('#slave-port').attr('value', data.slaveSshPort);
+            $('#slave-username').attr('value', data.slaveUsername);
+            $('#slave-password').attr('value', data.slavePassword);
+            $('#slave-app-path').attr('value', data.slaveAppPath);
 
         },
         complete: function () {
@@ -289,6 +478,78 @@ function slave_edit_btn(row_id) {
     $('#modal-slave-edit').modal('show');
 
 }
+
+
+function slave_delete_btn(row_id) {
+
+
+    swal({
+        title: "确定删除此节点?",
+        text: "删除节点警告!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes",
+        closeOnConfirm: false
+
+    }, function () {
+        $.ajax({
+            type: "POST",
+            url: "/api/deleteSlaveById",
+            data: {
+                slaveId: row_id
+            },
+            dataType: "json",
+            beforeSend: function () {
+            },
+            success: function (data) {
+                if (!data.status && data.isRedirect) {
+
+                    window.location = data.location;
+                    return false;
+                }
+
+                if(data.status){
+
+                    swal({
+                        title: "删除节点成功!",
+                        text: "成功消息.",
+                        type: 'success',
+                        timer: 3000,
+                        showConfirmButton: false
+                    });
+
+                    return true;
+                }
+
+                swal({
+                    title: "删除节点错误!",
+                    text: "错误消息.",
+                    type: 'success',
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+
+            },
+            complete: function () {
+
+            },
+            error: function () {
+
+                swal({
+                    title: "删除节点错误!",
+                    text: "错误消息.",
+                    type: 'success',
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+            }
+        });
+
+    });
+
+}
+
 
 function slave_update_btn() {
     //alert("Hi, update");
@@ -353,14 +614,76 @@ function slave_update_btn() {
             $('#modal-slave-edit').modal('hide');
         }
     });
-
-    return true;
 }
 
 
-function slave_delete_btn(row_id) {
+function task_add_btn() {
+
+    alert("Hi add a task .");
+    $('#modal-task-table').modal('show');
+}
 
 
+function task_table_detail_btn(row_id) {
+    alert("row id: " + row_id);
+    $('#modal-task-table').modal('show');
+
+}
+
+
+function task_table_edit_btn(row_id) {
+
+    alert("row id: " + row_id);
+    $('#modal-task-table').modal('show');
+}
+
+
+function task_table_delete_btn(row_id) {
+
+    alert("Hi ! delete !!! row id: " + row_id);
+}
+
+
+function slave_table_edit() {
+
+    //slave table
+    $("#slave-table-command").bootgrid({
+        css: {
+            icon: 'md icon',
+            iconColumns: 'md-view-module',
+            iconDown: 'md-expand-more',
+            iconRefresh: 'md-refresh',
+            iconUp: 'md-expand-less'
+        },
+        formatters: {
+            "commands": function (column, row) {
+                return "<button  type=\"button\" class=\"btn btn-icon command-edit\" onclick=\"slave_edit_btn('" + row.id + "')\" data-row-id=\"" + row.id + "\"><span class=\"md md-edit\"></span></button> " +
+                    "<button type=\"button\" class=\"btn btn-icon command-delete\" onclick=\"slave_delete_btn('" + row.id + "')\" data-row-id=\"" + row.id + "\"><span class=\"md md-delete\"></span></button>";
+            }
+        }
+    });
+}
+
+
+function task_table_edit() {
+
+    //task table
+    $("#task-table-command").bootgrid({
+        css: {
+            icon: 'md icon',
+            iconColumns: 'md-view-module',
+            iconDown: 'md-expand-more',
+            iconRefresh: 'md-refresh',
+            iconUp: 'md-expand-less'
+        },
+        formatters: {
+            "commands": function (column, row) {
+                return "<button type=\"button\" class=\"btn btn-default btn-icon\" onclick=\"task_table_detail_btn('" + row.id + "')\" data-row-id=\"" + row.id + "\"><span class=\"md md-apps\"></span></button> " +
+                    "<button type=\"button\" class=\"btn btn-icon command-edit\" onclick=\"task_table_edit_btn('" + row.id + "')\" data-row-id=\"" + row.id + "\"><span class=\"md md-edit\"></span></button> " +
+                    "<button type=\"button\" class=\"btn btn-icon command-delete\" onclick=\"task_table_delete_btn('" + row.id + "')\" data-row-id=\"" + row.id + "\"><span class=\"md md-delete\"></span></button>";
+            }
+        }
+    });
 }
 
 
@@ -404,7 +727,10 @@ function getAllSlave() {
         error: function () {
         }
     });
+
+    //slave_table_edit();
 }
+
 
 function getAllTaskShortcut() {
 
@@ -445,54 +771,14 @@ function getAllTaskShortcut() {
         error: function () {
         }
     });
+
+    //task_table_edit();
 }
 
-function slave_table_edit() {
-
-    //slave table
-    $("#slave-table-command").bootgrid({
-        css: {
-            icon: 'md icon',
-            iconColumns: 'md-view-module',
-            iconDown: 'md-expand-more',
-            iconRefresh: 'md-refresh',
-            iconUp: 'md-expand-less'
-        },
-        formatters: {
-            "commands": function (column, row) {
-                return "<button  type=\"button\" class=\"btn btn-icon command-edit\" onclick=\"slave_edit_btn(" + row.id + ")\" data-row-id=\"" + row.id + "\"><span class=\"md md-edit\"></span></button> " +
-                    "<button type=\"button\" class=\"btn btn-icon command-delete\" data-row-id=\"" + row.id + "\"><span class=\"md md-delete\"></span></button>";
-            }
-        }
-    });
-}
-
-
-function task_table_edit() {
-
-    //task table
-    $("#task-table-command").bootgrid({
-        css: {
-            icon: 'md icon',
-            iconColumns: 'md-view-module',
-            iconDown: 'md-expand-more',
-            iconRefresh: 'md-refresh',
-            iconUp: 'md-expand-less'
-        },
-        formatters: {
-            "commands": function (column, row) {
-                return "<button type=\"button\" class=\"btn btn-default btn-icon  waves-circle \" data-row-id=\"" + row.id + "\"><span class=\"md md-apps\"></span></button> " +
-                    "<button type=\"button\" class=\"btn btn-icon command-edit\" data-row-id=\"" + row.id + "\"><span class=\"md md-edit\"></span></button> " +
-                    "<button type=\"button\" class=\"btn btn-icon command-delete\" data-row-id=\"" + row.id + "\"><span class=\"md md-delete\"></span></button>";
-            }
-        }
-    });
-}
 
 $(document).ready(function () {
     get_scheduler_state();
     get_scheduler_config();
     getAllSlave();
-    getAllTaskShortcut()
-
+    getAllTaskShortcut();
 });

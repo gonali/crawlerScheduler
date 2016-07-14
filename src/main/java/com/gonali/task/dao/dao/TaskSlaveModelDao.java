@@ -61,6 +61,20 @@ public class TaskSlaveModelDao implements QueryDao {
         return null;
     }
 
+    public int deleteById(String tableName, String id) {
+        try {
+            String sql = "DELETE  FROM " + tableName + " WHERE slaveId = '" + id + "'";
+            mysqlClient.getConnection();
+            return mysqlClient.excuteUpdateSql(sql);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            mysqlClient.closeConnection();
+        }
+        return 0;
+    }
+
+
     @Override
     public int insert(String tableName, EntityModel model) {
 

@@ -12,6 +12,7 @@ import com.gonali.task.dao.message.RuntimeControlMsg;
 import com.gonali.task.dao.model.*;
 import com.gonali.task.dao.scheduler.TaskScheduler;
 import com.gonali.task.dao.utils.MD5Utils;
+import com.gonali.task.dao.utils.RandomUtils;
 import com.gonali.task.dao.utils.SessionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -79,10 +80,22 @@ public class ApplicationController {
                 .setIsRedirect(true).toString();
     }
 
-    @RequestMapping("taskStatus")
-    public String taskStatus(HttpServletRequest request) {
 
-        return "{status}";
+    @RequestMapping("startScheduler")
+    public String startScheduler() {
+        runtimeControlMsg.setSchedulerState(true);
+        return new ResponseStatus()
+                .setStatus(true)
+                .toString();
+    }
+
+
+    @RequestMapping("stopScheduler")
+    public String stopScheduler() {
+        runtimeControlMsg.setIsTaskRunning(false);
+        return new ResponseStatus()
+                .setStatus(true)
+                .toString();
     }
 
 
@@ -194,7 +207,7 @@ public class ApplicationController {
 
         String pid = ManagementFactory.getRuntimeMXBean().getName().split("@")[0];
         boolean state = scheduler.getRuntimeControlMsg().isTaskRunning();
-        boolean wait = scheduler.getRuntimeControlMsg().isCurrentTasksFinished();
+        boolean wait = !scheduler.getRuntimeControlMsg().isCurrentTasksFinished();
 
         return "{\"pid\":\"" + pid + "\",\"state\":" + state + ",\"wait\":" + wait + "}";
     }
@@ -278,7 +291,6 @@ public class ApplicationController {
 
     /**
      * @return json string
-     * <p/>
      * {
      * "adminPassword":"21232f297a57a5a743894a0e4a801fc3",
      * "configId":1,
@@ -381,6 +393,71 @@ public class ApplicationController {
     }
 
 
+    @RequestMapping("deleteSlaveById")
+    public String deleteSlaveById(HttpServletRequest request) {
+
+        try {
+            String slaveId = request.getParameter("slaveId");
+            if (slaveId == null)
+                return new ResponseStatus().setStatus(false).toString();
+
+            TaskSlaveModelDao dao = new TaskSlaveModelDao();
+
+            if(dao.deleteById(config.getTaskSlaveTable(), slaveId) > 0)
+                return new ResponseStatus().setStatus(true).toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return new ResponseStatus().setStatus(false).toString();
+    }
+
+    @RequestMapping("addSlave")
+    public String addSlave(HttpServletRequest request){
+        try {
+            TaskSlaveModel slave = new TaskSlaveModel();
+            String slaveId = RandomUtils.getRandomString(10);
+            String slaveIp = request.getParameter("slaveIp");
+            String slaveSshPort = request.getParameter("slaveSshPort");
+            String slaveUsername = request.getParameter("slaveUsername");
+            String slavePassword = request.getParameter("slavePassword");
+            String slaveAppPath = request.getParameter("slaveAppPath");
+
+            if (slaveId == null) {
+
+                return new ResponseStatus()
+                        .setStatus(false)
+                        .setIsRedirect(true)
+                        .setLocation("index.html")
+                        .toString();
+            }
+
+            slave.setSlaveId(slaveId);
+            slave.setSlaveIp(slaveIp);
+            slave.setSlaveUsername(slaveUsername);
+            slave.setSlavePassword(slavePassword);
+            slave.setSlaveSshPort(Integer.parseInt(slaveSshPort));
+            slave.setSlaveAppPath(slaveAppPath);
+
+            TaskSlaveModelDao dao = new TaskSlaveModelDao();
+
+            int ret = dao.insert(config.getTaskSlaveTable(), slave);
+            if (ret > 0)
+                return new ResponseStatus()
+                        .setStatus(true)
+                        .toString();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return new ResponseStatus()
+                .setStatus(false)
+                .setIsRedirect(true)
+                .setLocation("index.html")
+                .toString();
+    }
+
     @RequestMapping("updateSlave")
     public String updateSlave(HttpServletRequest request) {
 
@@ -428,5 +505,58 @@ public class ApplicationController {
                 .toString();
     }
 
+
+    @RequestMapping("updateSchedulerConfig")
+    public String updateSchedulerConfig(HttpServletRequest request) {
+
+        try {
+            String configId = request.getParameter("configId");
+            String redisHost = request.getParameter("redisHost");
+            String redisPort = request.getParameter("redisPort");
+            String maxTaskQueueSize = request.getParameter("maxTaskQueueSize");
+            String maxTaskRun = request.getParameter("maxTaskRun");
+            String maxHeartbeatTimeoutCount = request.getParameter("maxHeartbeatTimeoutCount");
+            String slaveHeartbeatInterval = request.getParameter("slaveHeartbeatInterval");
+            String slaveAppScript = request.getParameter("slaveAppScript");
+            String adminPassword = request.getParameter("adminPassword");
+
+            if (configId == null)
+                return new ResponseStatus()
+                        .setStatus(false)
+                        .setIsRedirect(false)
+                        .toString();
+
+            TaskConfigModel model = new TaskConfigModel();
+            TaskSlaveModelDao dao = new TaskSlaveModelDao();
+
+            model.setConfigId(Integer.parseInt(configId));
+            model.setRedisHost(redisHost);
+            model.setRedisPort(Integer.parseInt(redisPort));
+            model.setMaxTaskQueueSize(Integer.parseInt(maxTaskQueueSize));
+            model.setMaxTaskRun(Integer.parseInt(maxTaskRun));
+            model.setMaxHeartbeatTimeoutCount(Integer.parseInt(maxHeartbeatTimeoutCount));
+            model.setSlaveHeartbeatInterval(Integer.parseInt(slaveHeartbeatInterval));
+            model.setSlaveAppScript(slaveAppScript);
+
+            if (!SessionUtils.getPassword().equals(adminPassword))
+                model.setAdminPassword(MD5Utils.getStringMD5(adminPassword));
+            else model.setAdminPassword(SessionUtils.getPassword());
+
+            if (dao.update(config.getTaskConfigTable(), model) > 0)
+                return new ResponseStatus()
+                        .setStatus(true)
+                        .setIsRedirect(false)
+                        .toString();
+        } catch (NumberFormatException e) {
+
+            e.printStackTrace();
+        }
+
+
+        return new ResponseStatus()
+                .setStatus(false)
+                .setIsRedirect(false)
+                .toString();
+    }
 
 }

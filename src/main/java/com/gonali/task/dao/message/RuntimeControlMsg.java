@@ -13,9 +13,9 @@ public class RuntimeControlMsg implements Message {
 
     private RuntimeControlMsg() {
 
-        isTaskRunning = true;
-        isHeartbeatUpdating = true;
-        isCurrentTasksFinished = true;
+        isTaskRunning = false;
+        isHeartbeatUpdating = false;
+        isCurrentTasksFinished = false;
     }
 
     public static RuntimeControlMsg getRuntimeControlMsg() {

@@ -9,6 +9,21 @@
 
 
     <!-- Vendor CSS -->
+    <link href="vendors/bower_components/animate.css/animate.min.css" rel="stylesheet">
+    <link href="vendors/bower_components/sweetalert/dist/sweetalert-override.min.css" rel="stylesheet">
+    <link href="vendors/bower_components/material-design-iconic-font/css/material-design-iconic-font.min.css"
+          rel="stylesheet">
+    <link href="vendors/socicon/socicon.min.css" rel="stylesheet">
+    <link href="vendors/bower_components/bootstrap-select/dist/css/bootstrap-select.css" rel="stylesheet">
+    <link href="vendors/bower_components/nouislider/distribute/jquery.nouislider.min.css" rel="stylesheet">
+    <link href="vendors/bower_components/summernote/dist/summernote.css" rel="stylesheet">
+    <link href="vendors/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css"
+          rel="stylesheet">
+    <link href="vendors/farbtastic/farbtastic.css" rel="stylesheet">
+    <link href="vendors/chosen_v1.4.2/chosen.min.css" rel="stylesheet">
+
+
+    <!-- Vendor CSS -->
     <link href="vendors/bootgrid/jquery.bootgrid.min.css" rel="stylesheet">
     <link href="vendors/bower_components/animate.css/animate.min.css" rel="stylesheet">
     <link href="vendors/bower_components/sweetalert/dist/sweetalert-override.min.css" rel="stylesheet">
@@ -42,60 +57,69 @@
             <div class="modal-body">
                 <div class="card">
                     <div class="card-body card-padding">
+                        <input type="hidden" id="scheduler-config-id">
 
                         <div class="form-group">
                             <div class="fg-line">
                                 <small>Redis服务器 IP</small>
-                                <input id="scheduler-config-redis-ip" type="text" class="form-control" placeholder="Redis服务器 IP">
+                                <input id="scheduler-config-redis-ip" type="text" class="form-control"
+                                       placeholder="Redis服务器 IP">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="fg-line">
                                 <small>Redis服务器端口</small>
-                                <input id="scheduler-config-redis-port" type="text" class="form-control" placeholder="Redis服务器端口">
+                                <input id="scheduler-config-redis-port" type="text" class="form-control"
+                                       placeholder="Redis服务器端口">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="fg-line">
                                 <small>最大任务队列</small>
-                                <input id="scheduler-config-max-task-queue" type="text" class="form-control" placeholder="最大任务队列">
+                                <input id="scheduler-config-max-task-queue" type="text" class="form-control"
+                                       placeholder="最大任务队列">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="fg-line">
                                 <small>最大任务数</small>
-                                <input id="scheduler-config-max-task-run" type="text" class="form-control" placeholder="最大任务数">
+                                <input id="scheduler-config-max-task-run" type="text" class="form-control"
+                                       placeholder="最大任务数">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="fg-line">
                                 <small>心跳间隔</small>
-                                <input id="scheduler-config-checkinterval" type="text" class="form-control" placeholder="心跳间隔">
+                                <input id="scheduler-config-checkinterval" type="text" class="form-control"
+                                       placeholder="心跳间隔">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="fg-line">
                                 <small>最大心跳超时计数</small>
-                                <input id="scheduler-config-max-timeout-count" type="text" class="form-control" placeholder="最大心跳超时计数">
+                                <input id="scheduler-config-max-timeout-count" type="text" class="form-control"
+                                       placeholder="最大心跳超时计数">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="fg-line">
                                 <small>APP启动脚本</small>
-                                <input id="scheduler-config-app-script" type="text" class="form-control" placeholder="APP启动脚本">
+                                <input id="scheduler-config-app-script" type="text" class="form-control"
+                                       placeholder="APP启动脚本">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="fg-line">
                                 <small>后台管理密码</small>
-                                <input id="scheduler-config-admin-password" type="password" class="form-control" placeholder="后台管理密码">
+                                <input id="scheduler-config-admin-password" type="password" class="form-control"
+                                       placeholder="后台管理密码">
                             </div>
                         </div>
 
@@ -104,7 +128,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关 闭</button>
-                <button type="button" class="btn btn-primary">保存修改</button>
+                <button type="button" class="btn btn-primary" onclick="update_scheduler_config()">保存修改</button>
             </div>
         </div>
     </div>
@@ -124,10 +148,12 @@
 
                     <div class="card-body card-padding">
                         <input type="hidden" id="slave-id">
+
                         <div class="form-group">
                             <div class="fg-line">
                                 <small>节点 IP</small>
-                                <input style="float: right" type="text" id="slave-ip" class="form-control" placeholder="节点 IP">
+                                <input style="float: right" type="text" id="slave-ip" class="form-control"
+                                       placeholder="节点 IP">
                             </div>
                         </div>
 
@@ -171,6 +197,101 @@
     </div>
 </div>
 
+
+<!-- Modal task edit, add, delete, query  -->
+<div class="modal fade" id="modal-task-table" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="modal-task-title">任务配置信息</h4>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-body card-padding">
+
+                        <div class="form-group">
+                            <div class="fg-line">
+                                <small>任务 ID</small>
+                                <input id="task-id" type="text" class="form-control" placeholder="任务 ID" readonly>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="fg-line">
+                                <small>用户 ID</small>
+                                <input id="user-id" type="text" class="form-control" placeholder="用户 ID">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="fg-line">
+                                <small>任务名称</small>
+                                <input id="task-name" type="text" class="form-control" placeholder="任务名称">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="fg-line">
+                                <p>
+                                    <small>任务类型</small>
+                                </p>
+                                <select id="task-type" class="selectpicker">
+                                    <option>TOPIC (栏 目)</option>
+                                    <option>WHOLESITE (全 站)</option>
+                                    <option>UNSET (未指定)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="fg-line">
+                                <small>任务备注</small>
+                                <input id="task-remark" type="text" class="form-control" placeholder="任务备注">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="fg-line">
+                                <small>种子URL (多条用空格分隔)</small>
+                                <input id="task-seed-url" type="text" class="form-control" placeholder="种子URL">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="fg-line">
+                                <small>任务爬取深度</small>
+                                <input id="task-crawler-depth" type="text" class="form-control" placeholder="任务爬取深度">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="fg-line">
+                                <small>任务遍数</small>
+                                <input id="task-crawler-pass" type="text" class="form-control" placeholder="任务遍数">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="fg-line">
+                                <small>任务权重</small>
+                                <input id="task-crawler-weight" type="text" class="form-control" placeholder="任务权重">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关 闭</button>
+                <button type="button" class="btn btn-primary">保存修改</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <header id="header">
     <ul class="header-inner">
         <li id="menu-trigger" data-trigger="#sidebar">
@@ -202,6 +323,7 @@
                     </ul>
                 </li>
                 <li><a href="scheduler-control.html"><i class="md md-format-underline"></i> 调度控制</a></li>
+                <li><a href="sql-page.html"><i class="md md-swap-calls"></i>SQL 窗口</a></li>
                 <li><a href="#" onclick="do_logout()"><i class="md md-now-widgets"></i> 退 出</a></li>
             </ul>
         </div>
@@ -213,7 +335,7 @@
 
                 <div class="card-body card-padding">
                     <div class="block-header">
-                        <h2>调度器运行状态 |=== +++ === +++ === +++ === +++ === +++ === +++ === +++ ===|</h2>
+                        <h2>调度器运行状态</h2>
                         <ul class="actions">
                             <li class="dropdown">
                                 <a href="" data-toggle="dropdown"
@@ -237,6 +359,7 @@
                     </div>
                     <div class="notifications row block-header">
                         <input id="state-value-hidden" type="hidden" value="err"/>
+
                         <div class="col-sm-2 col-xs-6">
                             <a id="state-bar-running" class="btn btn-success" data-type="success"
                                style="background-color: green">正在运行</a>
@@ -256,7 +379,7 @@
             <div class="card">
                 <div class="card-header">
                     <h2>调度器配置信息
-                        <button onclick="slave_add_btn()"
+                        <button data-toggle="modal" data-target="#modal-config-info"
                                 class="btn bgm-lightgreen waves-effect" style="float: right"><i class="md md-menu"></i>
                         </button>
                     </h2>
@@ -300,9 +423,9 @@
                 <div class="card-header">
                     <h2>节点配置信息
                         <button class="btn btn-success btn-icon waves-effect waves-circle waves-float"
-                                data-toggle="modal" data-target="#modal-slave-edit"
-                                style="float: right"><i
-                                class="md md-more-vert"></i></button>
+                                onclick="slave_add_btn()"
+                                style="float: right"><i class="md md-more-vert"></i>
+                        </button>
                     </h2>
                 </div>
 
@@ -319,22 +442,7 @@
                     </tr>
                     </thead>
                     <tbody id="slave-table-body">
-                    <tr>
-                        <td>1001</td>
-                        <td>192.168.20.30</td>
-                        <td>22</td>
-                        <td>slave</td>
-                        <td>slave</td>
-                        <td>$HOME/crawler</td>
-                    </tr>
-                    <tr>
-                        <td>1002</td>
-                        <td>192.168.20.40</td>
-                        <td>22</td>
-                        <td>slave</td>
-                        <td>slave</td>
-                        <td>$HOME/crawler</td>
-                    </tr>
+                    <!-- js put the value here -->
                     </tbody>
                 </table>
             </div>
@@ -342,8 +450,7 @@
                 <div class="card-header">
                     <h2>任务配置信息
                         <button class="btn bgm-gray btn-icon waves-effect waves-circle waves-float"
-                                style="float: right"><i class="md md-trending-up"></i></button>
-                        </small>
+                                style="float: right" onclick="task_add_btn()"><i class="md md-trending-up"></i></button>
                     </h2>
                 </div>
 
@@ -359,21 +466,7 @@
                     </tr>
                     </thead>
                     <tbody id="task-table-body">
-                    <tr>
-                        <td>10238</td>
-                        <td>eduardo@pingpong.com</td>
-                        <td>14.10.2013</td>
-                    </tr>
-                    <tr>
-                        <td>10243</td>
-                        <td>eduardo@pingpong.com</td>
-                        <td>19.10.2013</td>
-                    </tr>
-                    <tr>
-                        <td>10248</td>
-                        <td>eduardo@pingpong.com</td>
-                        <td>24.10.2013</td>
-                    </tr>
+                    <!-- js put the value here -->
                     </tbody>
                 </table>
             </div>
@@ -468,46 +561,23 @@
 <script src="js/scheduler-control.js"></script>
 
 
-<script type="text/javascript">
-/*    $(document).ready(function () {
+<!-- hhhhheeeerrrrr -->
 
-        //slave table
-        $("#slave-table-command").bootgrid({
-            css: {
-                icon: 'md icon',
-                iconColumns: 'md-view-module',
-                iconDown: 'md-expand-more',
-                iconRefresh: 'md-refresh',
-                iconUp: 'md-expand-less'
-            },
-            formatters: {
-                "commands": function (column, row) {
-                    return "<button  type=\"button\" class=\"btn btn-icon command-edit\" onclick=\"slave_edit_btn(" + row.id + ")\" data-row-id=\"" + row.id + "\"><span class=\"md md-edit\"></span></button> " +
-                            "<button type=\"button\" class=\"btn btn-icon command-delete\" data-row-id=\"" + row.id + "\"><span class=\"md md-delete\"></span></button>";
-                }
-            }
-        });
+<!-- Javascript Libraries -->
 
-        //task table
-        $("#task-table-command").bootgrid({
-            css: {
-                icon: 'md icon',
-                iconColumns: 'md-view-module',
-                iconDown: 'md-expand-more',
-                iconRefresh: 'md-refresh',
-                iconUp: 'md-expand-less'
-            },
-            formatters: {
-                "commands": function (column, row) {
-                    return "<button type=\"button\" class=\"btn btn-default btn-icon  waves-circle \" data-row-id=\"" + row.id + "\"><span class=\"md md-apps\"></span></button> " +
-                            "<button type=\"button\" class=\"btn btn-icon command-edit\" data-row-id=\"" + row.id + "\"><span class=\"md md-edit\"></span></button> " +
-                            "<button type=\"button\" class=\"btn btn-icon command-delete\" data-row-id=\"" + row.id + "\"><span class=\"md md-delete\"></span></button>";
-                }
-            }
-        });
+<script src="vendors/bower_components/moment/min/moment.min.js"></script>
+<script src="vendors/bower_components/bootstrap-select/dist/js/bootstrap-select.js"></script>
+<script src="vendors/bower_components/nouislider/distribute/jquery.nouislider.all.min.js"></script>
+<script src="vendors/bower_components/summernote/dist/summernote.min.js"></script>
+<script src="vendors/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
 
-    })*/
-</script>
+<script src="vendors/chosen_v1.4.2/chosen.jquery.min.js"></script>
+<script src="vendors/fileinput/fileinput.min.js"></script>
+<script src="vendors/input-mask/input-mask.min.js"></script>
+<script src="vendors/farbtastic/farbtastic.min.js"></script>
+
+<!-- hhhhhheeeerrrrrr -->
+
 
 </body>
 </html>

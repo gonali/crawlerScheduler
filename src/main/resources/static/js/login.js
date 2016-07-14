@@ -21,8 +21,14 @@ function do_login() {
         success: function (data) {
             //var status = eval(data);
             if (!data.status) {
-                alert("Password Error !!!");
-                window.location = "/login.html"
+                swal({
+                    title: "登录密码错误!",
+                    text: "错误消息.",
+                    type: 'error',
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+                //window.location = "/login.html"
             } else {
                 window.location = "/index.html";
             }
@@ -30,6 +36,15 @@ function do_login() {
         complete: function () {
         },
         error: function () {
+
+            swal({
+                title: "登录错误!",
+                text: "错误消息.",
+                type: 'error',
+                timer: 3000,
+                showConfirmButton: false
+            });
+
         }
     });
 

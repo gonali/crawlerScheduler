@@ -105,11 +105,11 @@ public class TaskConfigModel implements EntityModel {
         TaskConfigModel taskConfigModel = (TaskConfigModel) model;
         String sql = "UPDATE " + tableName + " SET redisHost = '" + taskConfigModel.getRedisHost() + "'," +
                 "redisPort = '" + taskConfigModel.getRedisPort() + "'," +
-                "maxTaskQueueSize = " + taskConfigModel.getMaxTaskQueueSize() + ";" +
-                "maxTaskRun = " + taskConfigModel.getMaxTaskRun() + ";" +
-                "maxHeartbeatTimeoutCount = " + taskConfigModel.getMaxHeartbeatTimeoutCount() + ";" +
-                "slaveHeartbeatInterval = " + taskConfigModel.getSlaveHeartbeatInterval() + ";" +
-                "slaveAppScript = '" + taskConfigModel.getSlaveAppScript() + "'  " +
+                "maxTaskQueueSize = " + taskConfigModel.getMaxTaskQueueSize() + "," +
+                "maxTaskRun = " + taskConfigModel.getMaxTaskRun() + "," +
+                "maxHeartbeatTimeoutCount = " + taskConfigModel.getMaxHeartbeatTimeoutCount() + "," +
+                "slaveHeartbeatInterval = " + taskConfigModel.getSlaveHeartbeatInterval() + "," +
+                "slaveAppScript = '" + taskConfigModel.getSlaveAppScript() + "',  " +
                 "adminPassword = '" + taskConfigModel.getAdminPassword() + "' " +
                 "WHERE configId = " + taskConfigModel.getConfigId();
 
