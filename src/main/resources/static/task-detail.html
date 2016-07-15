@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<!--[if IE 9 ]>
+<html class="ie9"><![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>爬虫任务调度器</title>
+
+    <!-- Vendor CSS -->
+    <link href="vendors/bower_components/fullcalendar/dist/fullcalendar.min.css" rel="stylesheet">
+    <link href="vendors/bower_components/animate.css/animate.min.css" rel="stylesheet">
+    <link href="vendors/bower_components/sweetalert/dist/sweetalert-override.min.css" rel="stylesheet">
+    <link href="vendors/bower_components/material-design-iconic-font/css/material-design-iconic-font.min.css"
+          rel="stylesheet">
+    <link href="vendors/socicon/socicon.min.css" rel="stylesheet">
+
+    <!-- CSS -->
+    <link href="css/app.min.1.css" rel="stylesheet">
+    <link href="css/app.min.2.css" rel="stylesheet">
+
+</head>
+<body>
+<header id="header">
+    <ul class="header-inner">
+        <li id="menu-trigger" data-trigger="#sidebar">
+            <div class="line-wrap">
+                <div class="line top"></div>
+                <div class="line center"></div>
+                <div class="line bottom"></div>
+            </div>
+        </li>
+
+        <li class="logo hidden-xs">
+            <a href="index.html">任务详情</a>
+        </li>
+    </ul>
+
+</header>
+
+<section id="main">
+    <aside id="sidebar">
+        <div class="sidebar-inner c-overflow">
+
+            <ul class="main-menu">
+                <li class="active"><a href="index.html"><i class="md md-home"></i> 调度器状态 </a></li>
+                <li class="sub-menu">
+                    <a href=""><i class="md md-view-list"></i> 任务状态</a>
+
+                    <ul>
+                        <li><a href="queue-tables.html">队列状态</a></li>
+                        <li><a href="heartbeat-tables.html">心跳状态</a></li>
+                    </ul>
+                </li>
+                <li><a href="scheduler-control.html"><i class="md md-format-underline"></i> 调度控制</a></li>
+                <li><a href="sql-page.html"><i class="md md-swap-calls"></i>SQL 窗口</a></li>
+                <li><a href="#" onclick="do_logout()"><i class="md md-now-widgets"></i> 退 出</a></li>
+            </ul>
+        </div>
+    </aside>
+
+    <section id="content">
+        <div class="container">
+            <div class="block-header">
+                <h2> 任务ID:
+                    <a href="" id="task-detail-id" style="text-transform: none">123456</a>
+                </h2>
+            </div>
+
+            <div class="card">
+
+                <div class="card-header">
+                    <h2>任务详情信息
+                        <small>任务在数据库中各字段的记录详情</small>
+                    </h2>
+
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-vmiddle">
+                            <thead>
+                            <tr class="info">
+                                <th>序 号</th>
+                                <th>项目名称</th>
+                                <th>数据库字段</th>
+                                <th>记录值</th>
+                            </tr>
+                            </thead>
+                            <tbody id="task-detail-table-body">
+                            <tr>
+                                <td>1</td>
+                                <td>任务ID</td>
+                                <td>taskId</td>
+                                <td id="taskId"></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>用户ID</td>
+                                <td>userId</td>
+                                <td id="userId"></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>任务名称</td>
+                                <td>taskName</td>
+                                <td id="taskName"></td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>任务类型</td>
+                                <td>taskType</td>
+                                <td id="taskType"></td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>任务备注</td>
+                                <td>taskRemark</td>
+                                <td id="taskRemark"></td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td>种子URL</td>
+                                <td>taskSeedUrl</td>
+                                <td id="taskSeedUrl"></td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td>爬取深度</td>
+                                <td>taskCrawlerDepth</td>
+                                <td id="taskCrawlerDepth"></td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td>动态爬取深度</td>
+                                <td>taskDynamicDepth</td>
+                                <td id="taskDynamicDepth"></td>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                                <td>爬取遍数</td>
+                                <td>taskPass</td>
+                                <td id="taskPass"></td>
+                            </tr>
+                            <tr>
+                                <td>10</td>
+                                <td>权重</td>
+                                <td>taskWeight</td>
+                                <td id="taskWeight"></td>
+                            </tr>
+                            <tr>
+                                <td>11</td>
+                                <td>启动时间</td>
+                                <td>taskStartTime</td>
+                                <td id="taskStartTime"></td>
+                            </tr>
+                            <tr>
+                                <td>12</td>
+                                <td>重新爬取间隔天数</td>
+                                <td>taskRecrawlerDays</td>
+                                <td id="taskRecrawlerDays"></td>
+                            </tr>
+                            <tr>
+                                <td>13</td>
+                                <td>模板路径</td>
+                                <td>taskTemplatePath</td>
+                                <td id="taskTemplatePath"></td>
+                            </tr>
+                            <tr>
+                                <td>14</td>
+                                <td>标签路径</td>
+                                <td>taskTagPath</td>
+                                <td id="taskTagPath"></td>
+                            </tr>
+                            <tr>
+                                <td>15</td>
+                                <td>种子路径</td>
+                                <td>taskSeedPath</td>
+                                <td id="taskSeedPath"></td>
+                            </tr>
+                            <tr>
+                                <td>16</td>
+                                <td>配置路径</td>
+                                <td>taskConfigPath</td>
+                                <td id="taskConfigPath"></td>
+                            </tr>
+                            <tr>
+                                <td>17</td>
+                                <td>点击正则路径</td>
+                                <td>taskClickRegexPath</td>
+                                <td id="taskClickRegexPath"></td>
+                            </tr>
+                            <tr>
+                                <td>18</td>
+                                <td>协议过滤路径</td>
+                                <td>taskProtocolFilterPath</td>
+                                <td id="taskProtocolFilterPath"></td>
+                            </tr>
+                            <tr>
+                                <td>19</td>
+                                <td>后缀过滤路径</td>
+                                <td>taskSuffixFilterPath</td>
+                                <td id="taskSuffixFilterPath"></td>
+                            </tr>
+                            <tr>
+                                <td>20</td>
+                                <td>正则过滤路径</td>
+                                <td>taskRegexFilterPath</td>
+                                <td id="taskRegexFilterPath"></td>
+                            </tr>
+                            <tr>
+                                <td>21</td>
+                                <td>任务状态</td>
+                                <td>taskStatus</td>
+                                <td id="taskStatus"></td>
+                            </tr>
+                            <tr>
+                                <td>22</td>
+                                <td>删除标识</td>
+                                <td>taskDeleteFlag</td>
+                                <td id="taskDeleteFlag"></td>
+                            </tr>
+                            <tr>
+                                <td>23</td>
+                                <td>种子统计</td>
+                                <td>taskSeedAmount</td>
+                                <td id="taskSeedAmount"></td>
+                            </tr>
+                            <tr>
+                                <td>24</td>
+                                <td>种子导入统计</td>
+                                <td>taskSeedImportAmount</td>
+                                <td id="taskSeedImportAmount"></td>
+                            </tr>
+                            <tr>
+                                <td>25</td>
+                                <td>完成次数</td>
+                                <td>taskCompleteTimes</td>
+                                <td id="taskCompleteTimes"></td>
+                            </tr>
+                            <tr>
+                                <td>26</td>
+                                <td>实例线程数量</td>
+                                <td>taskInstanceThreads</td>
+                                <td id="taskInstanceThreads"></td>
+                            </tr>
+                            <tr>
+                                <td>27</td>
+                                <td>节点实例数量</td>
+                                <td>taskNodeInstances</td>
+                                <td id="taskNodeInstances"></td>
+                            </tr>
+                            <tr>
+                                <td>28</td>
+                                <td>停止时间</td>
+                                <td>taskStopTime</td>
+                                <td id="taskStopTime"></td>
+                            </tr>
+                            <tr>
+                                <td>29</td>
+                                <td>爬取统计信息</td>
+                                <td>taskCrawlerAmountInfo</td>
+                                <td id="taskCrawlerAmountInfo"></td>
+                            </tr>
+                            <tr>
+                                <td>30</td>
+                                <td>实例信息</td>
+                                <td>taskCrawlerInstanceInfo</td>
+                                <td id="taskCrawlerInstanceInfo"></td>
+                            </tr>
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</section>
+
+<footer id="footer">
+    Copyright &copy; 2016 新普智索信息科技有限公司
+
+    <ul class="f-menu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="#">Dashboard</a></li>
+        <li><a href="#">Reports</a></li>
+        <li><a href="#">Support</a></li>
+        <li><a href="#">Contact</a></li>
+    </ul>
+</footer>
+
+<!-- Older IE warning message -->
+<!--[if lt IE 9]>
+<div class="ie-warning">
+    <h1 class="c-white">Warning!!</h1>
+
+    <p>You are using an outdated version of Internet Explorer, please upgrade <br/>to any of the following web browsers
+        to access this website.</p>
+
+    <div class="iew-container">
+        <ul class="iew-download">
+            <li>
+                <a href="http://www.google.com/chrome/">
+                    <img src="img/browsers/chrome.png" alt="">
+
+                    <div>Chrome</div>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.mozilla.org/en-US/firefox/new/">
+                    <img src="img/browsers/firefox.png" alt="">
+
+                    <div>Firefox</div>
+                </a>
+            </li>
+            <li>
+                <a href="http://www.opera.com">
+                    <img src="img/browsers/opera.png" alt="">
+
+                    <div>Opera</div>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.apple.com/safari/">
+                    <img src="img/browsers/safari.png" alt="">
+
+                    <div>Safari</div>
+                </a>
+            </li>
+            <li>
+                <a href="http://windows.microsoft.com/en-us/internet-explorer/download-ie">
+                    <img src="img/browsers/ie.png" alt="">
+
+                    <div>IE (New)</div>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <p>Sorry for the inconvenience!</p>
+</div>
+<![endif]-->
+
+<!-- Javascript Libraries -->
+<script src="vendors/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="vendors/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+<script src="vendors/bower_components/flot/jquery.flot.js"></script>
+<script src="vendors/bower_components/flot/jquery.flot.resize.js"></script>
+<script src="vendors/bower_components/flot.curvedlines/curvedLines.js"></script>
+<script src="vendors/sparklines/jquery.sparkline.min.js"></script>
+<script src="vendors/bower_components/jquery.easy-pie-chart/dist/jquery.easypiechart.min.js"></script>
+
+<script src="vendors/bower_components/moment/min/moment.min.js"></script>
+<script src="vendors/bower_components/fullcalendar/dist/fullcalendar.min.js "></script>
+<script src="vendors/bower_components/simpleWeather/jquery.simpleWeather.min.js"></script>
+<script src="vendors/bower_components/jquery.nicescroll/jquery.nicescroll.min.js"></script>
+<script src="vendors/bower_components/Waves/dist/waves.min.js"></script>
+<script src="vendors/bootstrap-growl/bootstrap-growl.min.js"></script>
+<script src="vendors/bower_components/sweetalert/dist/sweetalert.min.js"></script>
+
+<!-- Placeholder for IE9 -->
+<!--[if IE 9 ]>
+<script src="vendors/bower_components/jquery-placeholder/jquery.placeholder.min.js"></script>
+<![endif]-->
+
+<!--<script src="js/flot-charts/curved-line-chart.js"></script>-->
+<!--<script src="js/flot-charts/line-chart.js"></script>
+<script src="js/charts.js"></script>-->
+
+
+<script src="js/charts.js"></script>
+<script src="js/functions.js"></script>
+<script src="js/demo.js"></script>
+
+<script src="js/logout.js"></script>
+<script src="js/getTaskDetail.js"></script>
+
+
+</body>
+</html>

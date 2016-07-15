@@ -318,6 +318,52 @@ public class ApplicationController {
         return "{}";
     }
 
+    @RequestMapping("getTaskDetail")
+    public String getTaskDetail(HttpServletRequest request) {
+
+        try {
+
+            String taskId = request.getParameter("taskId");
+            EntityModel model = new TaskModelDao().selectByTaskId(config.getTaskTable(), taskId);
+            if (model == null)
+                return new ResponseStatus()
+                        .setStatus(false)
+                        .setIsRedirect(true)
+                        .setLocation("index.html").toString();
+            return JSON.toJSONString(model);
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+
+        return new ResponseStatus()
+                .setStatus(false)
+                .setIsRedirect(true)
+                .setLocation("index.html").toString();
+    }
+
+    @RequestMapping("deleteTaskById")
+    public String deleteTaskById(HttpServletRequest request) {
+
+        try {
+            String taskId = request.getParameter("taskId");
+            if (taskId == null)
+                new ResponseStatus().setStatus(false).toString();
+
+            TaskModelDao dao = new TaskModelDao();
+            TaskModel model = new TaskModel();
+            model.setTaskId(taskId);
+
+            if (dao.softDeleteById(config.getTaskTable(), model) > 0)
+                return new ResponseStatus().setStatus(true).toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return new ResponseStatus().setStatus(false).toString();
+    }
+
     @RequestMapping("getAllTaskShortcut")
     public String getAllTaskShortcut() {
 
@@ -403,7 +449,7 @@ public class ApplicationController {
 
             TaskSlaveModelDao dao = new TaskSlaveModelDao();
 
-            if(dao.deleteById(config.getTaskSlaveTable(), slaveId) > 0)
+            if (dao.deleteById(config.getTaskSlaveTable(), slaveId) > 0)
                 return new ResponseStatus().setStatus(true).toString();
         } catch (Exception e) {
             e.printStackTrace();
@@ -412,8 +458,9 @@ public class ApplicationController {
         return new ResponseStatus().setStatus(false).toString();
     }
 
+
     @RequestMapping("addSlave")
-    public String addSlave(HttpServletRequest request){
+    public String addSlave(HttpServletRequest request) {
         try {
             TaskSlaveModel slave = new TaskSlaveModel();
             String slaveId = RandomUtils.getRandomString(10);
@@ -457,6 +504,7 @@ public class ApplicationController {
                 .setLocation("index.html")
                 .toString();
     }
+
 
     @RequestMapping("updateSlave")
     public String updateSlave(HttpServletRequest request) {

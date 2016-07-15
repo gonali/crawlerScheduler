@@ -489,7 +489,7 @@ function slave_delete_btn(row_id) {
         type: "warning",
         showCancelButton: true,
         confirmButtonColor: "#DD6B55",
-        confirmButtonText: "Yes",
+        confirmButtonText: "确 定",
         closeOnConfirm: false
 
     }, function () {
@@ -525,7 +525,7 @@ function slave_delete_btn(row_id) {
                 swal({
                     title: "删除节点错误!",
                     text: "错误消息.",
-                    type: 'success',
+                    type: 'error',
                     timer: 3000,
                     showConfirmButton: false
                 });
@@ -539,7 +539,7 @@ function slave_delete_btn(row_id) {
                 swal({
                     title: "删除节点错误!",
                     text: "错误消息.",
-                    type: 'success',
+                    type: 'error',
                     timer: 3000,
                     showConfirmButton: false
                 });
@@ -619,15 +619,14 @@ function slave_update_btn() {
 
 function task_add_btn() {
 
-    alert("Hi add a task .");
+    //alert("Hi add a task .");
     $('#modal-task-table').modal('show');
 }
 
 
 function task_table_detail_btn(row_id) {
-    alert("row id: " + row_id);
-    $('#modal-task-table').modal('show');
-
+    //alert("row id: " + row_id);
+    window.location = "task-detail.html?taskId=" + row_id;
 }
 
 
@@ -640,7 +639,70 @@ function task_table_edit_btn(row_id) {
 
 function task_table_delete_btn(row_id) {
 
-    alert("Hi ! delete !!! row id: " + row_id);
+    swal({
+        title: "确定删除此任务?",
+        text: "删除任务警告!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "确 定",
+        closeOnConfirm: false
+
+    }, function () {
+        $.ajax({
+            type: "POST",
+            url: "/api/deleteTaskById",
+            data: {
+                taskId: row_id
+            },
+            dataType: "json",
+            beforeSend: function () {
+            },
+            success: function (data) {
+                if (!data.status && data.isRedirect) {
+
+                    window.location = data.location;
+                    return false;
+                }
+
+                if(data.status){
+
+                    swal({
+                        title: "删除任务成功!",
+                        text: "成功消息.",
+                        type: 'success',
+                        timer: 3000,
+                        showConfirmButton: false
+                    });
+
+                    return true;
+                }
+
+                swal({
+                    title: "删除任务错误!",
+                    text: "错误消息.",
+                    type: 'error',
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+
+            },
+            complete: function () {
+
+            },
+            error: function () {
+
+                swal({
+                    title: "删除任务错误!",
+                    text: "错误消息.",
+                    type: 'error',
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+            }
+        });
+
+    });
 }
 
 

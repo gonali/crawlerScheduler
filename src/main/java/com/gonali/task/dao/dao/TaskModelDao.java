@@ -4,6 +4,7 @@ package com.gonali.task.dao.dao;
 
 import com.gonali.task.dao.dao.client.MysqlClient;
 import com.gonali.task.dao.model.*;
+import com.gonali.task.dao.model.fields.TaskConfigModelTableField;
 import com.gonali.task.dao.utils.LoggerUtils;
 import com.gonali.task.dao.message.codes.TaskStatus;
 import com.gonali.task.dao.message.codes.TaskType;
@@ -122,6 +123,32 @@ public class TaskModelDao extends LoggerUtils implements QueryDao {
         }
 
         return modelList;
+    }
+
+    public int softDeleteById(String tableName, EntityModel model){
+
+        String sql = "UPDATE " + tableName + " SET "+ TaskModeTableField.taskDeleteFlag +" = true WHERE " + TaskModeTableField.PK + " = '" + model.getPrimaryKey() + "'";
+
+        if (this.mysqlClient.getConnection() == null)
+            return 0;
+
+        int ret = 0;
+        try {
+
+            ret = this.mysqlClient.excuteUpdateSql(sql);
+
+            return ret;
+
+        } catch (Exception ex) {
+            logger.warn("delete exception!!! SQL: " + sql);
+            ex.printStackTrace();
+
+        } finally {
+
+            this.mysqlClient.closeConnection();
+        }
+
+        return 0;
     }
 
     @Override
