@@ -198,7 +198,7 @@
 </div>
 
 
-<!-- Modal task edit, add, delete, query  -->
+<!-- Modal task edit, add  -->
 <div class="modal fade" id="modal-task-table" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -214,21 +214,21 @@
                         <div class="form-group">
                             <div class="fg-line">
                                 <small>任务 ID</small>
-                                <input id="task-id" type="text" class="form-control" placeholder="系统自动生成">
+                                <input id="taskId" type="text" class="form-control" placeholder="系统自动生成">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="fg-line">
                                 <small>用户 ID</small>
-                                <input id="user-id" type="text" class="form-control" placeholder="用户 ID">
+                                <input id="userId" type="text" class="form-control" placeholder="用户 ID">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="fg-line">
                                 <small>任务名称</small>
-                                <input id="task-name" type="text" class="form-control" placeholder="任务名称">
+                                <input id="taskName" type="text" class="form-control" placeholder="任务名称">
                             </div>
                         </div>
 
@@ -237,7 +237,7 @@
                                 <p>
                                     <small>任务类型</small>
                                 </p>
-                                <select id="task-type" class="selectpicker">
+                                <select id="taskType" class="selectpicker">
                                     <option>TOPIC (栏 目)</option>
                                     <option>WHOLESITE (全 站)</option>
                                     <option>UNSET (未指定)</option>
@@ -250,7 +250,7 @@
                                 <p>
                                     <small>任务状态</small>
                                 </p>
-                                <select id="task-status" class="selectpicker">
+                                <select id="taskStatus" class="selectpicker">
                                     <option>UNCRAWL (未爬取)</option>
                                     <option>CRAWLING (正在爬取)</option>
                                     <option>CRAWLED (已经爬取)</option>
@@ -264,49 +264,49 @@
                         <div class="form-group">
                             <div class="fg-line">
                                 <small>任务备注</small>
-                                <input id="task-remark" type="text" class="form-control" placeholder="任务备注">
+                                <input id="taskRemark" type="text" class="form-control" placeholder="任务备注">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="fg-line">
                                 <small>种子URL (多条用空格分隔)</small>
-                                <input id="task-seed-url" type="text" class="form-control" placeholder="种子URL">
+                                <input id="taskSeedUrl" type="text" class="form-control" placeholder="种子URL">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="fg-line">
                                 <small>任务爬取深度</small>
-                                <input id="task-crawler-depth" type="text" class="form-control" placeholder="任务爬取深度">
+                                <input id="taskCrawlerDepth" type="text" class="form-control" placeholder="任务爬取深度">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="fg-line">
                                 <small>任务遍数</small>
-                                <input id="task-crawler-pass" type="text" class="form-control" placeholder="任务遍数">
+                                <input id="taskPass" type="text" class="form-control" placeholder="任务遍数">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="fg-line">
                                 <small>任务节点实例数</small>
-                                <input id="task-nodeInstances" type="text" class="form-control" placeholder="任务节点实例数">
+                                <input id="taskNodeInstances" type="text" class="form-control" placeholder="任务节点实例数">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="fg-line">
                                 <small>任务实例线程数</small>
-                                <input id="task-instanceThreads" type="text" class="form-control" placeholder="任务实例线程数">
+                                <input id="taskInstanceThreads" type="text" class="form-control" placeholder="任务实例线程数">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="fg-line">
                                 <p><small>任务权重</small></p>
-                                <select id="task-crawler-weight" class="selectpicker">
+                                <select id="taskWeight" class="selectpicker">
                                     <option>10</option>
                                     <option>20</option>
                                     <option>30</option>
@@ -324,77 +324,77 @@
                         <div class="form-group">
                             <div class="fg-line">
                                 <small>任务启动时间</small>
-                                <input id="task-start-time" type='text' class="form-control date-time-picker" data-toggle="dropdown" placeholder="点击选择...">
+                                <input id="taskStartTime" type='text' class="form-control date-time-picker" data-toggle="dropdown" placeholder="点击选择...">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="fg-line">
                                 <small>任务停止时间</small>
-                                <input id="task-stop-time" type='text' class="form-control date-time-picker" data-toggle="dropdown" placeholder="点击选择...">
+                                <input id="taskStopTime" type='text' class="form-control date-time-picker" data-toggle="dropdown" placeholder="点击选择...">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="fg-line">
                                 <small>任务重新爬取间隔天数</small>
-                                <input id="task-recrawler-days" type="text" class="form-control" placeholder="任务重新爬取间隔天数">
+                                <input id="taskRecrawlerDays" type="text" class="form-control" placeholder="任务重新爬取间隔天数">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="fg-line">
                                 <small>任务模板路径</small>
-                                <input id="task-templates-path" type="text" class="form-control" placeholder="任务模板路径">
+                                <input id="taskTemplatesPath" type="text" class="form-control" placeholder="任务模板路径">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="fg-line">
                                 <small>任务标签路径</small>
-                                <input id="task-tag-path" type="text" class="form-control" placeholder="任务标签路径">
+                                <input id="taskTagPath" type="text" class="form-control" placeholder="任务标签路径">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="fg-line">
                                 <small>任务种子路径</small>
-                                <input id="task-seed-path" type="text" class="form-control" placeholder="任务种子路径">
+                                <input id="taskSeedPath" type="text" class="form-control" placeholder="任务种子路径">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="fg-line">
                                 <small>任务配置路径</small>
-                                <input id="task-config-path" type="text" class="form-control" placeholder="任务配置路径">
+                                <input id="taskConfigPath" type="text" class="form-control" placeholder="任务配置路径">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="fg-line">
                                 <small>任务点击正则路径</small>
-                                <input id="task-clickRegex-path" type="text" class="form-control" placeholder="任务点击正则路径">
+                                <input id="taskClickRegexPath" type="text" class="form-control" placeholder="任务点击正则路径">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="fg-line">
                                 <small>任务协议过滤路径</small>
-                                <input id="task-protocolFilter-path" type="text" class="form-control" placeholder="任务协议过滤路径">
+                                <input id="taskProtocolFilterPath" type="text" class="form-control" placeholder="任务协议过滤路径">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="fg-line">
                                 <small>任务后缀过滤路径</small>
-                                <input id="task-suffixFilter-path" type="text" class="form-control" placeholder="任务后缀过滤路径">
+                                <input id="taskSuffixFilterPath" type="text" class="form-control" placeholder="任务后缀过滤路径">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="fg-line">
                                 <small>任务正则过滤路径</small>
-                                <input id="task-regexFilter-path" type="text" class="form-control" placeholder="任务正则过滤路径">
+                                <input id="taskRegexFilterPath" type="text" class="form-control" placeholder="任务正则过滤路径">
                             </div>
                         </div>
 
