@@ -2,29 +2,32 @@ package com.gonali.task.deamon;
 
 
 import com.gonali.task.rulers.base.RulerBase;
+import com.gonali.task.scheduler.TaskScheduler;
 
 /**
  * Created by TianyuanPan on 6/5/16.
  */
-public class AppMainEntry {
+public class AppMainEntry implements Runnable{
 
-    private static TaskDeamon taskDeamon;
 
+    private static TaskScheduler scheduler;
 
     static {
 
-        taskDeamon = TaskDeamon.createDeamon();
+        scheduler = TaskScheduler.createTaskScheduler();
     }
 
 
-    public void appStart(RulerBase ruler) {
+    public AppMainEntry setRuler(RulerBase ruler) {
 
-        Thread taskDeamon = new Thread(AppMainEntry.taskDeamon.setRuler(ruler));
-        taskDeamon.setDaemon(false);
-        taskDeamon.start();
-
-        System.out.println("Hi! Scheduler AppDeamon!");
+        scheduler.registerRuler(ruler);
+        return this;
     }
 
 
+    @Override
+    public void run() {
+
+        scheduler.schedulerStart();
+    }
 }

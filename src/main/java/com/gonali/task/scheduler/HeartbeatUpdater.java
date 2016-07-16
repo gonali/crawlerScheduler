@@ -171,16 +171,18 @@ public class HeartbeatUpdater implements Runnable {
             for (int i = 0; i < size; i++) {
 
                 if (heartbeatMsgList.get(i).getTimeoutCount() > timesOfMaxTimeout * getMaxTimeoutCount()) {
-                    index.add(i);
+                    heartbeatMsgList.remove(i);
+                    size = heartbeatMsgList.size();
+
                 } else if (heartbeatMsgList.get(i).getTimeoutCount() > getMaxTimeoutCount() &&
                         heartbeatMsgList.get(i).getStatusCode() == HeartbeatStatusCode.FINISHED) {
-                    index.add(i);
+                    heartbeatMsgList.remove(i);
+                    size = heartbeatMsgList.size();
                 }
             }
-            for (Integer i : index)
-                heartbeatMsgList.remove(i.intValue());
+
         } catch (Exception e) {
-            System.out.println("Exception: at HeartbeatUpdater, method cleanMoreTimeoutHeartbeat(...).");
+            System.out.println("Exception: at HeartbeatUpdater.java, method cleanMoreTimeoutHeartbeat(...).");
             e.printStackTrace();
         } finally {
 

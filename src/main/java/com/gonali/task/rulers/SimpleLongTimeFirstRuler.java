@@ -51,6 +51,7 @@ public class SimpleLongTimeFirstRuler extends RulerBase {
     public CurrentTask doSchedule(TaskScheduler scheduler) {
 
         currentTasks = scheduler.getCurrentTasks();
+        List<HeartbeatMsgModel> heartbeatList = scheduler.getHeartbeatUpdater().getHeartbeatMsgList();
         TaskModel task;
 
         if (!scheduler.getRuntimeControlMsg().isTaskRunning()){
@@ -60,6 +61,7 @@ public class SimpleLongTimeFirstRuler extends RulerBase {
                 task.setTaskStatus(TaskStatus.UNCRAWL);
                 addToWriteBack(task);
             }
+            currentTasks.setHeartbeatList(heartbeatList);
             return currentTasks;
         }
 
@@ -83,8 +85,6 @@ public class SimpleLongTimeFirstRuler extends RulerBase {
         }
 
         //cleanInQueueTaskId();
-
-        List<HeartbeatMsgModel> heartbeatList = scheduler.getHeartbeatUpdater().getHeartbeatMsgList();
 
         currentTasks.setHeartbeatList(heartbeatList);
 

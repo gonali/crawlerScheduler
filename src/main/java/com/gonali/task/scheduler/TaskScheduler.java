@@ -270,11 +270,15 @@ public class TaskScheduler {
 
         while (true) {
 
-            if (runtimeControlMsg.isTaskRunning()) {
+            try {
 
-                cleanTaskQueue();
-                cleanHeartbeatMsgQueue();
-                new Thread(heartbeatUpdater).start();
+                if (runtimeControlMsg.isTaskRunning()) {
+
+                    cleanTaskQueue();
+                    cleanHeartbeatMsgQueue();
+                    new Thread(heartbeatUpdater).start();
+                    runtimeControlMsg.setIsCurrentTaskFinished(false);
+                }
 
                 while (runtimeControlMsg.isTaskRunning() || !runtimeControlMsg.isCurrentTasksFinished()) {
 
@@ -297,7 +301,7 @@ public class TaskScheduler {
 
                         }
 
-                        // killTimeoutNodes(currentTasks);
+                        killTimeoutNodes(currentTasks);
 
                         currentTasks.taskStatusChecking();
                         currentTasks.taskNodeTimeoutChecking();
@@ -306,7 +310,11 @@ public class TaskScheduler {
 
                         heartbeatUpdater.cleanMoreTimeoutHeartbeat(config.getTaskConfig().getMaxHeartbeatTimeoutCount());
 
-                        if (currentTasks.getFreeNodes() == currentTasks.getTaskNumber()) {
+                        if (currentTasks.getFreeNodes() != currentTasks.getTaskNumber()) {
+                            runtimeControlMsg.setIsCurrentTaskFinished(false);
+                            runtimeControlMsg.setIsHeartbeatUpdating(true);
+                        } else {
+
                             runtimeControlMsg.setIsCurrentTaskFinished(true);
                             runtimeControlMsg.setIsHeartbeatUpdating(false);
                         }
@@ -330,16 +338,24 @@ public class TaskScheduler {
                 }
 
                 runtimeControlMsg.setIsTaskRunning(false);
-            }
 
 
-            try {
+                try {
 
-                Thread.sleep(500);
+                    Thread.sleep(500);
 
-            } catch (InterruptedException e) {
+                } catch (InterruptedException e) {
 
-                e.printStackTrace();
+                    e.printStackTrace();
+                }
+
+
+            } catch (Exception ex) {
+
+                runtimeControlMsg.setIsCurrentTaskFinished(true);
+                runtimeControlMsg.setIsHeartbeatUpdating(false);
+                runtimeControlMsg.setIsTaskRunning(false);
+                ex.printStackTrace();
             }
 
         }

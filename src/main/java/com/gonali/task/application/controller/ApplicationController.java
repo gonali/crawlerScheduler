@@ -31,14 +31,14 @@ import java.util.List;
 @RequestMapping("/api")
 public class ApplicationController {
 
-    private static RuntimeControlMsg runtimeControlMsg;
     private static TaskScheduler scheduler;
+    private static RuntimeControlMsg runtimeControlMsg;
     private static Config config;
 
     static {
 
-        runtimeControlMsg = RuntimeControlMsg.getRuntimeControlMsg();
         scheduler = TaskScheduler.createTaskScheduler();
+        runtimeControlMsg = scheduler.getRuntimeControlMsg();
         config = Config.getConfig();
     }
 
@@ -72,6 +72,7 @@ public class ApplicationController {
         return new ResponseStatus().setStatus(true).toString();
     }
 
+
     @RequestMapping("unloginproccess")
     public String unloginproccess(HttpServletRequest request) {
 
@@ -83,7 +84,7 @@ public class ApplicationController {
 
     @RequestMapping("startScheduler")
     public String startScheduler() {
-        runtimeControlMsg.setSchedulerState(true);
+        runtimeControlMsg.setIsTaskRunning(true);
         runtimeControlMsg.setIsHeartbeatUpdating(true);
         return new ResponseStatus()
                 .setStatus(true)

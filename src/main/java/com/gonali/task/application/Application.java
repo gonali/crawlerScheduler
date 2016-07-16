@@ -12,15 +12,18 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class Application {
 
-    public static AppMainEntry myApp;
+    //public static AppMainEntry myApp;
 
     public static void main(String[] args) {
 
-        myApp = new AppMainEntry();
-
-        myApp.appStart(new SimpleLongTimeFirstRuler());
+        AppMainEntry myApp = new AppMainEntry();
+        myApp.setRuler(new SimpleLongTimeFirstRuler());
+        Thread myThread = new Thread(myApp);
+        myThread.setDaemon(false);
 
         SpringApplication.run(Application.class, args);
+
+        myThread.run();
     }
 
 }

@@ -61,14 +61,6 @@ public class Config {
     }
 
 
-    /*public ResourceBundle getResourceBundle() {
-        return resourceBundle;
-    }
-
-    public template void setResourceBundle(ResourceBundle resourceBundle) {
-        Config.resourceBundle = resourceBundle;
-    }*/
-
     public String getMysqlHost() {
         return mysqlHost;
     }
