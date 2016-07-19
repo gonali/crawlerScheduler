@@ -434,13 +434,10 @@ function slave_add_btn() {
     $('#modal-slave-edit-btn').html('添 加');
     $('#modal-slave-edit-btn').attr('onclick', 'slave_add()');
     $('#modal-slave-edit').modal('show');
-
 }
 
 
 function slave_edit_btn(row_id) {
-
-    //alert("row-id: " + row_id);
 
     $.ajax({
         type: "POST",
@@ -509,7 +506,7 @@ function slave_delete_btn(row_id) {
                     return false;
                 }
 
-                if(data.status){
+                if (data.status) {
 
                     swal({
                         title: "删除节点成功!",
@@ -552,7 +549,7 @@ function slave_delete_btn(row_id) {
 
 
 function slave_update_btn() {
-    //alert("Hi, update");
+
     $.ajax({
         type: "POST",
         url: "/api/updateSlave",
@@ -619,8 +616,150 @@ function slave_update_btn() {
 
 function task_add_btn() {
 
-    //alert("Hi add a task .");
+    //title id
+    $('#modal-task-title').html('添加新任务');
+    //modal box confirm button
+    $('#confirm-btn').html('添 加');
+    $('#confirm-btn').attr('onclick', 'add_new_or_update_task("/api/addNewTask")');
+
+
+    $('#userId').attr('value', '');
+    $('#taskId').attr('value', '');
+    $('#taskId').attr('readonly', false);
+    $('#taskName').attr('value', '');
+    $('#taskType').attr('value', '');
+    $('#taskRemark').attr('value', '');
+    $('#taskSeedUrl').attr('value', '');
+    $('#taskCrawlerDepth').attr('value', '');
+    $('#taskDynamicDepth').attr('value', '');
+    $('#taskPass').attr('value', '');
+    $('#taskWeight').attr('value', '');
+    $('#taskStartTime').attr('value', '');
+    $('#taskRecrawlerDays').attr('value', '');
+    $('#taskTemplatePath').attr('value', '');
+    $('#taskTagPath').attr('value', '');
+    $('#taskSeedPath').attr('value', '');
+    $('#taskConfigPath').attr('value', '');
+    $('#taskClickRegexPath').attr('value', '');
+    $('#taskProtocolFilterPath').attr('value', '');
+    $('#taskSuffixFilterPath').attr('value', '');
+    $('#taskRegexFilterPath').attr('value', '');
+    $('#taskStatus').attr('value', '');
+    $('#taskInstanceThreads').attr('value', '');
+    $('#taskNodeInstances').attr('value', '');
+    $('#taskStopTime').attr('value', '');
+
+
     $('#modal-task-table').modal('show');
+}
+
+
+function add_new_or_update_task(api_path) {
+
+    var t1 = "" + $('#taskStartTime').val();
+    var t2 = "" + $('#taskStopTime').val();
+
+    var y1 = t1.split('/')[2].split(' ')[0];
+    var m1 = t1.split('/')[0];
+    var d1 = t1.split('/')[1];
+    var h1;
+    if (t1.split('/')[2].split(' ')[2] == 'PM') {
+        var hh = (t1.split('/')[2].split(' ')[1].split(':')[0]) * 1 + 12;
+        h1 = hh + ":" + (t1.split('/')[2].split(' ')[1].split(':')[1] + ":00");
+    } else {
+        h1 = (t1.split('/')[2].split(' ')[1]) + ":00";
+    }
+
+
+    var y2 = t2.split('/')[2].split(' ')[0];
+    var m2 = t2.split('/')[0];
+    var d2 = t2.split('/')[1];
+    var h2;
+    if (t1.split('/')[2].split(' ')[2] == 'PM') {
+        var hh = (t1.split('/')[2].split(' ')[1].split(':')[0]) * 1 + 12;
+        h2 = hh + ":" + (t1.split('/')[2].split(' ')[1].split(':')[1] + ":00");
+    } else {
+        h2 = (t1.split('/')[2].split(' ')[1]) + ":00";
+    }
+
+    $.ajax({
+        type: "POST",
+        url: api_path,
+        data: {
+            taskId: $('#taskId').val(),
+            userId: $('#userId').val(),
+            taskName: $('#taskName').val(),
+            taskType: $('#taskType').val(),
+            taskStatus: $('#taskStatus').val(),
+            taskRemark: $('#taskRemark').val(),
+            taskSeedUrl: $('#taskSeedUrl').val(),
+            taskCrawlerDepth: $('#taskCrawlerDepth').val(),
+            taskPass: $('#taskPass').val(),
+            taskNodeInstances: $('#taskNodeInstances').val(),
+            taskInstanceThreads: $('#taskInstanceThreads').val(),
+            taskWeight: $('#taskWeight').val(),
+            taskStartTime: y1 + '-' + m1 + '-' + d1 + ' ' + h1,//$('#taskStartTime').val(),
+            taskStopTime: y2 + '-' + m2 + '-' + d2 + ' ' + h2,//$('#taskStopTime').val(),
+            taskRecrawlerDays: $('#taskRecrawlerDays').val(),
+            taskTemplatesPath: $('#taskTemplatesPath').val(),
+            taskTagPath: $('#taskTagPath').val(),
+            taskSeedPath: $('#taskSeedPath').val(),
+            taskConfigPath: $('#taskConfigPath').val(),
+            taskClickRegexPath: $('#taskClickRegexPath').val(),
+            taskProtocolFilterPath: $('#taskProtocolFilterPath').val(),
+            taskSuffixFilterPath: $('#taskSuffixFilterPath').val(),
+            taskRegexFilterPath: $('#taskRegexFilterPath').val()
+        },
+        dataType: "json",
+        beforeSend: function () {
+
+        },
+        success: function (data) {
+
+            if (!data.status && data.isRedirect) {
+
+                window.location = data.location;
+                return false;
+            }
+
+            if (data.status) {
+                swal({
+                    title: "更新操作成功!",
+                    text: "成功消息.",
+                    type: 'success',
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+            } else {
+
+                swal({
+                    title: "更新操作错误!",
+                    text: "错误消息.",
+                    type: 'error',
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+            }
+
+            $('#modal-task-table').modal('hide');
+        },
+        complete: function () {
+
+        },
+        error: function () {
+            swal({
+                title: "更新操作错误!",
+                text: "错误消息.",
+                type: 'error',
+                timer: 3000,
+                showConfirmButton: false
+            });
+
+            $('#modal-slave-edit').modal('hide');
+        }
+    });
+
+
 }
 
 
@@ -632,11 +771,9 @@ function task_table_detail_btn(row_id) {
 
 function task_table_edit_btn(row_id) {
 
-    alert("row id: " + row_id);
-
     $.ajax({
         type: "POST",
-        url: "/api/getTaskDetail",
+        url: "/api/getTaskDetailById",
         data: {
             taskId: row_id
         },
@@ -660,40 +797,33 @@ function task_table_edit_btn(row_id) {
                 return false;
             }
 
+            $('#userId').attr('value', data.userId);
+            $('#taskId').attr('value', data.taskId);
+            $('#taskId').attr('readonly', true);
+            $('#taskName').attr('value', data.taskName);
+            $('#taskType').attr('value', data.taskType);
+            $('#taskRemark').attr('value', data.taskRemark);
+            $('#taskSeedUrl').attr('value', data.taskSeedUrl.seedurlJsonString);
+            $('#taskCrawlerDepth').attr('value', data.taskCrawlerDepth);
+            $('#taskDynamicDepth').attr('value', data.taskDynamicDepth);
+            $('#taskPass').attr('value', data.taskPass);
+            $('#taskWeight').attr('value', data.taskWeight);
+            $('#taskStartTime').attr('value', new Date(data.taskStartTime));
+            $('#taskRecrawlerDays').attr('value', data.taskRecrawlerDays);
+            $('#taskTemplatePath').attr('value', data.taskTemplatePath);
+            $('#taskTagPath').attr('value', data.taskTagPath);
+            $('#taskSeedPath').attr('value', data.taskSeedPath);
+            $('#taskConfigPath').attr('value', data.taskConfigPath);
+            $('#taskClickRegexPath').attr('value', data.taskClickRegexPath);
+            $('#taskProtocolFilterPath').attr('value', data.taskProtocolFilterPath);
+            $('#taskSuffixFilterPath').attr('value', data.taskSuffixFilterPath);
+            $('#taskRegexFilterPath').attr('value', data.taskRegexFilterPath);
+            $('#taskStatus').attr('value', data.taskStatus);
+            $('#taskInstanceThreads').attr('value', data.taskInstanceThreads);
+            $('#taskNodeInstances').attr('value', data.taskNodeInstances);
+            $('#taskStopTime').attr('value', new Date(data.taskStopTime));
 
 
-            $('#userId').html(data.userId);
-            $('#taskId').html(data.taskId);
-            $('#taskName').html(data.taskName);
-            $('#taskType').html(data.taskType);
-            $('#taskRemark').html(data.taskRemark);
-            $('#taskSeedUrl').html(data.taskSeedUrl.seedurlJsonString);
-            $('#taskCrawlerDepth').html(data.taskCrawlerDepth);
-            $('#taskDynamicDepth').html(data.taskDynamicDepth);
-            $('#taskPass').html(data.taskPass);
-            $('#taskWeight').html(data.taskWeight);
-            $('#taskStartTime').html(new Date(data.taskStartTime));
-            $('#taskRecrawlerDays').html(data.taskRecrawlerDays);
-            $('#taskTemplatePath').html(data.taskTemplatePath);
-            $('#taskTagPath').html(data.taskTagPath);
-            $('#taskSeedPath').html(data.taskSeedPath);
-            $('#taskConfigPath').html(data.taskConfigPath);
-            $('#taskClickRegexPath').html(data.taskClickRegexPath);
-            $('#taskProtocolFilterPath').html(data.taskProtocolFilterPath);
-            $('#taskSuffixFilterPath').html(data.taskSuffixFilterPath);
-            $('#taskRegexFilterPath').html(data.taskRegexFilterPath);
-            $('#taskStatus').html(data.taskStatus);
-            $('#taskDeleteFlag').html(data.taskDeleteFlag.toString());
-            $('#taskSeedAmount').html(data.taskSeedAmount);
-            $('#taskSeedImportAmount').html(data.taskSeedImportAmount);
-            $('#taskCompleteTimes').html(data.taskCompleteTimes);
-            $('#taskInstanceThreads').html(data.taskInstanceThreads);
-            $('#taskNodeInstances').html(data.taskNodeInstances);
-            $('#taskStopTime').html(new Date(data.taskStopTime));
-            $('#taskCrawlerAmountInfo').html(data.taskCrawlerAmountInfo.crawlerAmountInfoJsonString);
-            $('#taskCrawlerInstanceInfo').html(data.taskCrawlerInstanceInfo.crawlerInstanceInfoJsonString);
-
-            $('#modal-task-table').modal('show');
         },
         complete: function () {
 
@@ -708,6 +838,13 @@ function task_table_edit_btn(row_id) {
             });
         }
     });
+
+    //title id
+    $('#modal-task-title').html('更新任务配置');
+    //modal box confirm button
+    $('#confirm-btn').html('更 新');
+    $('#confirm-btn').attr('onclick', 'add_new_or_update_task("/api/updateTaskById")');
+    $('#modal-task-table').modal('show');
 
 }
 
@@ -740,7 +877,7 @@ function task_table_delete_btn(row_id) {
                     return false;
                 }
 
-                if(data.status){
+                if (data.status) {
 
                     swal({
                         title: "删除任务成功!",

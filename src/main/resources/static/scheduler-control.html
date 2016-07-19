@@ -235,12 +235,12 @@
                         <div class="form-group">
                             <div class="fg-line">
                                 <p>
-                                    <small>任务类型</small>
+                                    <small>任务类型 (栏目:TOPIC; 全站:WHOLESITE; 未指定:UNSET)</small>
                                 </p>
                                 <select id="taskType" class="selectpicker">
-                                    <option>TOPIC (栏 目)</option>
-                                    <option>WHOLESITE (全 站)</option>
-                                    <option>UNSET (未指定)</option>
+                                    <option>TOPIC</option>
+                                    <option>WHOLESITE</option>
+                                    <option>UNSET</option>
                                 </select>
                             </div>
                         </div>
@@ -248,15 +248,15 @@
                         <div class="form-group">
                             <div class="fg-line">
                                 <p>
-                                    <small>任务状态</small>
+                                    <small>任务状态 (未爬取:UNCRAWL; 正在爬取:CRAWLING; 已经爬取:CRAWLED; 在队列中:INQUEUE; 节点等待:NODEWAITING; 异常停止:EXCEPTIOSTOP;)</small>
                                 </p>
                                 <select id="taskStatus" class="selectpicker">
-                                    <option>UNCRAWL (未爬取)</option>
-                                    <option>CRAWLING (正在爬取)</option>
-                                    <option>CRAWLED (已经爬取)</option>
-                                    <option>INQUEUE (在队列中)</option>
-                                    <option>NODEWAITING (节点等待)</option>
-                                    <option>EXCEPTIOSTOP (异常停止)</option>
+                                    <option>UNCRAWL</option>
+                                    <option>CRAWLING</option>
+                                    <option>CRAWLED</option>
+                                    <option>INQUEUE</option>
+                                    <option>NODEWAITING</option>
+                                    <option>EXCEPTIOSTOP</option>
                                 </select>
                             </div>
                         </div>
@@ -403,7 +403,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关 闭</button>
-                <button type="button" class="btn btn-primary">添 加</button>
+                <button id="confirm-btn" type="button" class="btn btn-primary">添 加</button>
             </div>
         </div>
     </div>

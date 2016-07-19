@@ -9,6 +9,8 @@ import com.gonali.task.dao.TaskConfigModelDao;
 import com.gonali.task.dao.TaskModelDao;
 import com.gonali.task.dao.TaskSlaveModelDao;
 import com.gonali.task.message.RuntimeControlMsg;
+import com.gonali.task.message.codes.TaskStatus;
+import com.gonali.task.message.codes.TaskType;
 import com.gonali.task.model.*;
 import com.gonali.task.scheduler.TaskScheduler;
 import com.gonali.task.utils.MD5Utils;
@@ -320,7 +322,257 @@ public class ApplicationController {
         return "{}";
     }
 
-    @RequestMapping("getTaskDetail")
+    @RequestMapping("addNewTask")
+    public String addNewTask(HttpServletRequest request) {
+
+        String taskId = request.getParameter("taskId");
+        String userId = request.getParameter("userId");
+        String taskName = request.getParameter("taskName");
+        String taskType = request.getParameter("taskType");
+        String taskStatus = request.getParameter("taskStatus");
+        String taskRemark = request.getParameter("taskRemark");
+        String taskSeedUrl = request.getParameter("taskSeedUrl");
+        String taskCrawlerDepth = request.getParameter("taskCrawlerDepth");
+        String taskPass = request.getParameter("taskPass");
+        String taskNodeInstances = request.getParameter("taskNodeInstances");
+        String taskInstanceThreads = request.getParameter("taskInstanceThreads");
+        String taskWeight = request.getParameter("taskWeight");
+        String taskStartTime = request.getParameter("taskStartTime");
+        String taskStopTime = request.getParameter("taskStopTime");
+        String taskRecrawlerDays = request.getParameter("taskRecrawlerDays");
+        String taskTemplatesPath = request.getParameter("taskTemplatesPath");
+        String taskTagPath = request.getParameter("taskTagPath");
+        String taskSeedPath = request.getParameter("taskSeedPath");
+        String taskConfigPath = request.getParameter("taskConfigPath");
+        String taskClickRegexPath = request.getParameter("taskClickRegexPath");
+        String taskProtocolFilterPath = request.getParameter("taskProtocolFilterPath");
+        String taskSuffixFilterPath = request.getParameter("taskSuffixFilterPath");
+        String taskRegexFilterPath = request.getParameter("taskRegexFilterPath");
+
+        if (taskId.equals("") || taskId == null)
+            taskId = RandomUtils.getRandomString(16);
+
+        TaskModel task = new TaskModel();
+
+        task.setTaskId(taskId);
+        task.setTaskName(taskName);
+        task.setUserId(userId);
+        switch (taskType) {
+            case "TOPIC":
+                task.setTaskType(TaskType.TOPIC);
+                break;
+            case "WHOLESITE":
+                task.setTaskType(TaskType.WHOLESITE);
+                break;
+            default:
+                task.setTaskType(TaskType.UNSET);
+                break;
+        }
+        switch (taskStatus) {
+            case "CRAWLING":
+                task.setTaskStatus(TaskStatus.CRAWLING);
+                break;
+            case "CRAWLED":
+                task.setTaskStatus(TaskStatus.CRAWLED);
+                break;
+            case "EXCEPTIOSTOP":
+                task.setTaskStatus(TaskStatus.EXCEPTIOSTOP);
+                break;
+            case "INQUEUE":
+                task.setTaskStatus(TaskStatus.INQUEUE);
+                break;
+            case "UNCRAWL":
+                task.setTaskStatus(TaskStatus.UNCRAWL);
+                break;
+            default:
+                task.setTaskStatus(TaskStatus.UNCRAWL);
+                break;
+        }
+
+        task.setTaskRemark(taskRemark);
+
+        task.setTaskSeedUrl(new TaskSeedUrlModel(taskSeedUrl));
+        try {
+            task.setTaskCrawlerDepth(Integer.parseInt(taskCrawlerDepth));
+        } catch (NumberFormatException e) {
+            task.setTaskCrawlerDepth(3);
+        }
+        try {
+            task.setTaskPass(Integer.parseInt(taskPass));
+        } catch (NumberFormatException e) {
+            task.setTaskPass(3);
+        }
+        try {
+            task.setTaskNodeInstances(Integer.parseInt(taskNodeInstances));
+        } catch (NumberFormatException e) {
+            task.setTaskNodeInstances(1);
+        }
+        try {
+            task.setTaskInstanceThreads(Integer.parseInt(taskInstanceThreads));
+        } catch (NumberFormatException e) {
+            task.setTaskInstanceThreads(5);
+        }
+        try {
+            task.setTaskWeight(Integer.parseInt(taskWeight));
+        } catch (NumberFormatException e) {
+            task.setTaskWeight(10);
+        }
+        try {
+            task.setTaskRecrawlerDays(Integer.parseInt(taskRecrawlerDays));
+        } catch (NumberFormatException e) {
+            task.setTaskRecrawlerDays(1);
+        }
+
+        try {
+            task.setTaskStartTime(new SimpleDateFormat("YYYY-MM-dd HH:mm:ss").parse(taskStartTime).getTime());
+            task.setTaskStopTime(new SimpleDateFormat("YYYY-MM-dd HH:mm:ss").parse(taskStopTime).getTime());
+        } catch (Exception e) {
+
+        }
+
+        task.setTaskTemplatePath(taskTemplatesPath);
+        task.setTaskTagPath(taskTagPath);
+        task.setTaskSeedPath(taskSeedPath);
+        task.setTaskConfigPath(taskConfigPath);
+        task.setTaskClickRegexPath(taskClickRegexPath);
+        task.setTaskProtocolFilterPath(taskProtocolFilterPath);
+        task.setTaskSuffixFilterPath(taskSuffixFilterPath);
+        task.setTaskRegexFilterPath(taskRegexFilterPath);
+
+        TaskSlaveModelDao dao = new TaskSlaveModelDao();
+
+        if (dao.insert(config.getTaskTable(), task) > 0)
+            return new ResponseStatus().setStatus(true).toString();
+
+        return new ResponseStatus().setStatus(false).toString();
+    }
+
+    @RequestMapping("updateTaskById")
+    public String updateTaskById(HttpServletRequest request){
+
+        String taskId = request.getParameter("taskId");
+        String userId = request.getParameter("userId");
+        String taskName = request.getParameter("taskName");
+        String taskType = request.getParameter("taskType");
+        String taskStatus = request.getParameter("taskStatus");
+        String taskRemark = request.getParameter("taskRemark");
+        String taskSeedUrl = request.getParameter("taskSeedUrl");
+        String taskCrawlerDepth = request.getParameter("taskCrawlerDepth");
+        String taskPass = request.getParameter("taskPass");
+        String taskNodeInstances = request.getParameter("taskNodeInstances");
+        String taskInstanceThreads = request.getParameter("taskInstanceThreads");
+        String taskWeight = request.getParameter("taskWeight");
+        String taskStartTime = request.getParameter("taskStartTime");
+        String taskStopTime = request.getParameter("taskStopTime");
+        String taskRecrawlerDays = request.getParameter("taskRecrawlerDays");
+        String taskTemplatesPath = request.getParameter("taskTemplatesPath");
+        String taskTagPath = request.getParameter("taskTagPath");
+        String taskSeedPath = request.getParameter("taskSeedPath");
+        String taskConfigPath = request.getParameter("taskConfigPath");
+        String taskClickRegexPath = request.getParameter("taskClickRegexPath");
+        String taskProtocolFilterPath = request.getParameter("taskProtocolFilterPath");
+        String taskSuffixFilterPath = request.getParameter("taskSuffixFilterPath");
+        String taskRegexFilterPath = request.getParameter("taskRegexFilterPath");
+
+        if (taskId.equals("") || taskId == null)
+            return new ResponseStatus().setStatus(false).toString();
+
+        TaskModel task = new TaskModel();
+
+        task.setTaskId(taskId);
+        task.setTaskName(taskName);
+        task.setUserId(userId);
+        switch (taskType) {
+            case "TOPIC":
+                task.setTaskType(TaskType.TOPIC);
+                break;
+            case "WHOLESITE":
+                task.setTaskType(TaskType.WHOLESITE);
+                break;
+            default:
+                task.setTaskType(TaskType.UNSET);
+                break;
+        }
+        switch (taskStatus) {
+            case "CRAWLING":
+                task.setTaskStatus(TaskStatus.CRAWLING);
+                break;
+            case "CRAWLED":
+                task.setTaskStatus(TaskStatus.CRAWLED);
+                break;
+            case "EXCEPTIOSTOP":
+                task.setTaskStatus(TaskStatus.EXCEPTIOSTOP);
+                break;
+            case "INQUEUE":
+                task.setTaskStatus(TaskStatus.INQUEUE);
+                break;
+            case "UNCRAWL":
+                task.setTaskStatus(TaskStatus.UNCRAWL);
+                break;
+            default:
+                task.setTaskStatus(TaskStatus.UNCRAWL);
+                break;
+        }
+
+        task.setTaskRemark(taskRemark);
+
+        task.setTaskSeedUrl(new TaskSeedUrlModel(taskSeedUrl));
+        try {
+            task.setTaskCrawlerDepth(Integer.parseInt(taskCrawlerDepth));
+        } catch (NumberFormatException e) {
+            task.setTaskCrawlerDepth(3);
+        }
+        try {
+            task.setTaskPass(Integer.parseInt(taskPass));
+        } catch (NumberFormatException e) {
+            task.setTaskPass(3);
+        }
+        try {
+            task.setTaskNodeInstances(Integer.parseInt(taskNodeInstances));
+        } catch (NumberFormatException e) {
+            task.setTaskNodeInstances(1);
+        }
+        try {
+            task.setTaskInstanceThreads(Integer.parseInt(taskInstanceThreads));
+        } catch (NumberFormatException e) {
+            task.setTaskInstanceThreads(5);
+        }
+        try {
+            task.setTaskWeight(Integer.parseInt(taskWeight));
+        } catch (NumberFormatException e) {
+            task.setTaskWeight(10);
+        }
+        try {
+            task.setTaskRecrawlerDays(Integer.parseInt(taskRecrawlerDays));
+        } catch (NumberFormatException e) {
+            task.setTaskRecrawlerDays(1);
+        }
+
+        try {
+            task.setTaskStartTime(new Date(taskStartTime).getTime());
+            task.setTaskStopTime(new Date(taskStopTime).getTime());
+        } catch (Exception e) {
+
+        }
+
+        task.setTaskTemplatePath(taskTemplatesPath);
+        task.setTaskTagPath(taskTagPath);
+        task.setTaskSeedPath(taskSeedPath);
+        task.setTaskConfigPath(taskConfigPath);
+        task.setTaskClickRegexPath(taskClickRegexPath);
+        task.setTaskProtocolFilterPath(taskProtocolFilterPath);
+        task.setTaskSuffixFilterPath(taskSuffixFilterPath);
+        task.setTaskRegexFilterPath(taskRegexFilterPath);
+
+        TaskSlaveModelDao dao = new TaskSlaveModelDao();
+
+        if (dao.update(config.getTaskTable(), task) > 0)
+            return new ResponseStatus().setStatus(true).toString();
+
+        return new ResponseStatus().setStatus(false).toString();
+    }
+
+    @RequestMapping("getTaskDetailById")
     public String getTaskDetail(HttpServletRequest request) {
 
         try {

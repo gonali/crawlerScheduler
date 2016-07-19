@@ -69,7 +69,7 @@ function getTaskDetail() {
 
     $.ajax({
         type: "POST",
-        url: "/api/getTaskDetail",
+        url: "/api/getTaskDetailById",
         data: {
             taskId: tid
         },
