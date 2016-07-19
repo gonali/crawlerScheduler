@@ -4,11 +4,10 @@ package com.gonali.task.rulers;
 import com.gonali.task.message.codes.TaskStatus;
 import com.gonali.task.model.EntityModel;
 import com.gonali.task.model.TaskModel;
-import com.gonali.task.rulers.base.RulerBase;
-import com.gonali.task.scheduler.TaskScheduler;
-import com.gonali.task.model.HeartbeatMsgModel;
 import com.gonali.task.redisQueue.TaskQueue;
+import com.gonali.task.rulers.base.RulerBase;
 import com.gonali.task.scheduler.CurrentTask;
+import com.gonali.task.scheduler.TaskScheduler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,19 +22,14 @@ public class SimpleLongTimeFirstRuler extends RulerBase {
         super();
     }
 
+
     @Override
     public void writeBack(TaskScheduler scheduler) {
 
-        //List<TaskModel> currentTasks = scheduler.getCurrentTasks().getCrawledTask();
-
         try {
-
-            /*for (TaskModel t : currentTasks)
-                addToWriteBack(t);*/
 
             for (EntityModel m : writeBackEntityList) {
                 taskModelDao.update(taskTableName, m);
-                //            writeBackEntityList.remove(m);
             }
 
             writeBackEntityList = new ArrayList<>();
@@ -44,29 +38,25 @@ public class SimpleLongTimeFirstRuler extends RulerBase {
             System.out.println("Exception: at SimpleLongTimeFirstRuler.java, method writeBack().");
             e.printStackTrace();
         }
-
     }
 
     @Override
     public CurrentTask doSchedule(TaskScheduler scheduler) {
 
         currentTasks = scheduler.getCurrentTasks();
-        List<HeartbeatMsgModel> heartbeatList = scheduler.getHeartbeatUpdater().getHeartbeatMsgList();
         TaskModel task;
 
-        if (!scheduler.getRuntimeControlMsg().isTaskRunning()){
+        if (!scheduler.getRuntimeControlMsg().isTaskRunning()) {
 
-            while((task = getTask()) != null){
+            while ((task = getTask()) != null) {
 
                 task.setTaskStatus(TaskStatus.UNCRAWL);
                 addToWriteBack(task);
+                removeInQueueTaskIdAndName(task.getTaskId());
             }
-            currentTasks.setHeartbeatList(heartbeatList);
             return currentTasks;
         }
 
-
-        //cleanInQueueTaskId();
 
         if (getCurrentTaskQueueLength() < 2 * scheduler.getCurrentTasks().getTaskNumber())
             updateTaskQueue();
@@ -84,23 +74,9 @@ public class SimpleLongTimeFirstRuler extends RulerBase {
             removeInQueueTaskIdAndName(task.getTaskId());
         }
 
-        //cleanInQueueTaskId();
-
-        currentTasks.setHeartbeatList(heartbeatList);
-
         return currentTasks;
     }
 
-    /* private void cleanInQueueTaskId() {
-
-        List<TaskModel> taskModelList = currentTasks.getCurrentTaskElements();
-        for (TaskModel t : taskModelList) {
-
-            if (isInQueueTaskIdHaveThis(t.getTaskId()))
-                removeInQueueTaskIdAndName(t.getTaskId());
-        }
-
-    }*/
 
     private void updateTaskQueue() {
 
@@ -108,10 +84,6 @@ public class SimpleLongTimeFirstRuler extends RulerBase {
         List<EntityModel> toQueue = new ArrayList<>();
         int size = modelList.size();
         for (int i = 0; i < size; i++) {
-
-            /*if (!isInQueueTaskIdHaveThis(((TaskModel) modelList.get(i)).getTaskId())) {
-                toQueue.add(modelList.get(i));
-            }*/
 
             if (!isInQueueTaskIdHaveThis(((TaskModel) modelList.get(i)).getTaskId()) &&
                     ((TaskModel) modelList.get(i)).getTaskStatus() == TaskStatus.UNCRAWL) {
@@ -130,12 +102,11 @@ public class SimpleLongTimeFirstRuler extends RulerBase {
                 addTaskIdAndNameToInQueue(sortedModels[i].getTaskId(), sortedModels[i].getTaskName());
                 TaskQueue.pushCrawlerTaskQueue(sortedModels[i]);
                 addToWriteBack(sortedModels[i]);
-                //getCurrentTaskQueueLength();
+
             } else break;
         }
 
         getCurrentTaskQueueLength();
-        //cleanInQueueTaskId();
     }
 
 

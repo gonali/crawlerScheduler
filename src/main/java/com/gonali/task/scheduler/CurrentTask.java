@@ -1,7 +1,6 @@
 package com.gonali.task.scheduler;
 
 
-
 import com.gonali.task.message.codes.HeartbeatStatusCode;
 import com.gonali.task.message.codes.TaskStatus;
 import com.gonali.task.model.TaskModel;
@@ -85,7 +84,7 @@ public class CurrentTask {
 
             for (HeartbeatMsgModel h : heartbeatList) {
                 isHave = false;
-                for (int i = 0; i < msgSize; ++i) {
+                for (int i = 0; i < msgSize; i++) {
                     if (this.heartbeatList.get(i).getHostname().equals(h.getHostname()) &&
                             this.heartbeatList.get(i).getPid() == h.getPid()) {
 
@@ -110,7 +109,7 @@ public class CurrentTask {
         }
 
 
-        public void setTaskStopTime(long time){
+        public void setTaskStopTime(long time) {
 
             this.task.setTaskStopTime(time);
         }
@@ -272,6 +271,37 @@ public class CurrentTask {
 
         return taskModelList;
 
+    }
+
+
+    public List<TaskModel> getCurrentUnfinishedTasks() {
+
+        List<TaskModel> taskModelList = new ArrayList<>();
+
+        for (int i = 0; i < taskNumber; i++) {
+
+            if (currentTaskArray[i] == null || currentTaskArray[i].isFinished())
+                continue;
+            taskModelList.add(currentTaskArray[i].getTask());
+        }
+
+        return taskModelList;
+
+    }
+
+
+    public boolean isTasksFinished() {
+
+        boolean finished = true;
+
+        for (int i = 0; i < taskNumber; i++) {
+            if (currentTaskArray[i] == null)
+                continue;
+
+            finished &= currentTaskArray[i].isFinished();
+        }
+
+        return finished;
     }
 
     public int getFreeNodes() {

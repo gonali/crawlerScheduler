@@ -5,6 +5,7 @@ import com.gonali.task.message.codes.HeartbeatStatusCode;
 import com.gonali.task.model.HeartbeatMsgModel;
 import com.gonali.task.model.TaskModel;
 import com.gonali.task.nodes.NodeInfo;
+import org.apache.commons.logging.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +14,6 @@ import java.util.List;
  * Created by TianyuanPan on 6/25/16.
  */
 public class NodesStarting implements Runnable {
-
-    private final int aSecond = 1000;
 
     private TaskModel task;
     private List<NodeInfo> nodeInfoList;
@@ -31,6 +30,7 @@ public class NodesStarting implements Runnable {
     @Override
     public void run() {
 
+        int aSecond = 1000;
         boolean isFirst = true;
 
         for (NodeInfo node : nodeInfoList) {
@@ -63,8 +63,10 @@ public class NodesStarting implements Runnable {
 
             List<HeartbeatMsgModel> heartbeatMsgModelList = heartbeatUpdater.getHeartbeatMsg(task.getTaskId());
 
-            if (isHeartbeatCodeFinished(heartbeatMsgModelList))
+            if (isHeartbeatCodeFinished(heartbeatMsgModelList)) {
+                System.out.println("Task [ id:" + task.getTaskId() + ", name:" + task.getTaskName() + "] finished during the node starting.");
                 break;
+            }
         }
     }
 

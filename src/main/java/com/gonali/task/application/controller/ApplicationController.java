@@ -183,7 +183,7 @@ public class ApplicationController {
             }
         }
         SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
-        List<TaskModel> taskModelList = scheduler.getCurrentTasks().getCurrentTaskElements();
+        List<TaskModel> taskModelList = scheduler.getCurrentTasks().getCurrentUnfinishedTasks();
         List<CurrentTaskView> taskViews = new ArrayList<>();
         int size = taskModelList.size();
 

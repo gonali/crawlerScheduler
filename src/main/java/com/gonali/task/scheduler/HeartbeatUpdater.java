@@ -16,7 +16,7 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * Created by TianyuanPan on 6/5/16.
  */
-public class HeartbeatUpdater implements Runnable {
+public class HeartbeatUpdater /*implements Runnable*/ {
 
     private volatile List<HeartbeatMsgModel> heartbeatMsgList;
     private HeartbeatMsgQueue messageQueue;
@@ -59,7 +59,7 @@ public class HeartbeatUpdater implements Runnable {
 
     }
 
-    @Override
+    //@Override
     public void run() {
 
         while (runtimeControlMsg.isHeartbeatUpdating()) {
@@ -85,6 +85,29 @@ public class HeartbeatUpdater implements Runnable {
         }
     }
 
+
+    public void  doUpdate(){
+
+        try {
+
+            updateHeartbeatMsg();
+            heartbeatTimeoutCheck();
+
+        } catch (Exception e) {
+            System.out.println("Exception: at HeartbeatUpdater, method run().");
+            e.printStackTrace();
+        }
+
+        try {
+
+            Thread.sleep(checkInterval * 10);
+
+        } catch (InterruptedException e) {
+
+            e.printStackTrace();
+        }
+
+    }
 
     private void updateHeartbeatMsg() {
 
@@ -165,7 +188,6 @@ public class HeartbeatUpdater implements Runnable {
         try {
             myLock.lock();
 
-            List<Integer> index = new ArrayList<>();
             int size = heartbeatMsgList.size();
 
             for (int i = 0; i < size; i++) {
@@ -206,6 +228,7 @@ public class HeartbeatUpdater implements Runnable {
             myLock.unlock();
         }
     }
+
 
     public void cleanFinishedHeartbeat(String taskId, String hostname, int pid) {
 
@@ -256,6 +279,7 @@ public class HeartbeatUpdater implements Runnable {
         return null;
     }
 
+
     public HeartbeatMsgModel getHeartbeatMsg(String taskId, String hostname, int pid) {
 
         try {
@@ -279,6 +303,7 @@ public class HeartbeatUpdater implements Runnable {
 
         return null;
     }
+
 
     public List<HeartbeatMsgModel> getHeartbeatMsg(String taskId) {
 

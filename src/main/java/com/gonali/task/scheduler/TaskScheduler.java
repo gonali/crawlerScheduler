@@ -35,7 +35,6 @@ public class TaskScheduler {
     private RulerBase ruler;
     private Config config;
     private int nodeNumber;
-    //private List<String[]> hostInfoList;
     private List<TaskSlaveModel> slaveList;
 
 
@@ -105,19 +104,6 @@ public class TaskScheduler {
         currentTasks = new CurrentTask(currentTaskSize);
         currentTasks.setNodes(nodeNumber);
 
-
-       /* hostInfoList = new ArrayList<>();
-
-        try {
-            for (int i = 1; i <= nodeNumber; ++i) {
-                String info = ConfigUtils.getResourceBundle("nodes").getString("NODE_" + i);
-                hostInfoList.add(info.split("::"));
-            }
-        } catch (Exception e) {
-
-            e.printStackTrace();
-        }*/
-
     }
 
 
@@ -169,7 +155,6 @@ public class TaskScheduler {
 
         for (int i = 0; i < nodeNumber; ++i) {
 
-            //nodeInfo = new NodeInfo(hostInfoList.get(i)[0], hostInfoList.get(i)[1], hostInfoList.get(i)[2], command);
             nodeInfo = new NodeInfo(slaveList.get(i).getSlaveUsername(),
                     slaveList.get(i).getSlavePassword(),
                     slaveList.get(i).getSlaveIp(), command);
@@ -199,12 +184,6 @@ public class TaskScheduler {
                     if (h.getStatusCode() != HeartbeatStatusCode.FINISHED &&
                             h.getTimeoutCount() > HeartbeatUpdater.getMaxTimeoutCount()) {
 
-                        /*for (String[] ss : hostInfoList) {
-                            if (ss[2].equals(h.getHostname())) {
-                                nodeInfo = new NodeInfo(ss[0], ss[1], ss[2], "kill -9 " + h.getPid());
-                                nodeInfoList.add(nodeInfo);
-                            }
-                        }*/
                         for (TaskSlaveModel m : slaveList) {
                             if (m.getSlaveIp().equals(h.getHostname())) {
 
@@ -276,7 +255,7 @@ public class TaskScheduler {
 
                     cleanTaskQueue();
                     cleanHeartbeatMsgQueue();
-                    new Thread(heartbeatUpdater).start();
+                    //new Thread(heartbeatUpdater).start();
                     runtimeControlMsg.setIsCurrentTaskFinished(false);
                 }
 
@@ -301,8 +280,12 @@ public class TaskScheduler {
 
                         }
 
-                        killTimeoutNodes(currentTasks);
+                        heartbeatUpdater.doUpdate();
 
+                        List<HeartbeatMsgModel> heartbeatList = scheduler.getHeartbeatUpdater().getHeartbeatMsgList();
+                        currentTasks.setHeartbeatList(heartbeatList);
+
+                        killTimeoutNodes(currentTasks);
                         currentTasks.taskStatusChecking();
                         currentTasks.taskNodeTimeoutChecking();
                         currentTasks.taskFinishedChecking(this);
@@ -310,16 +293,16 @@ public class TaskScheduler {
 
                         heartbeatUpdater.cleanMoreTimeoutHeartbeat(config.getTaskConfig().getMaxHeartbeatTimeoutCount());
 
-                        if (currentTasks.getFreeNodes() != currentTasks.getTaskNumber()) {
+                        if (!currentTasks.isTasksFinished()) {
+
                             runtimeControlMsg.setIsCurrentTaskFinished(false);
                             runtimeControlMsg.setIsHeartbeatUpdating(true);
+
                         } else {
 
                             runtimeControlMsg.setIsCurrentTaskFinished(true);
                             runtimeControlMsg.setIsHeartbeatUpdating(false);
                         }
-
-                        //System.out.println("Is CurrentTaskArray have finished task ? : " + currentTasks.isHaveFinishedTask());
 
                     } catch (Exception e) {
                         System.out.println("Exception: at TaskScheduler.java, method schedulerStart() B.");
@@ -358,14 +341,20 @@ public class TaskScheduler {
                 ex.printStackTrace();
             }
 
+
+            try {
+
+                Thread.sleep(500);
+
+            } catch (InterruptedException e) {
+
+                e.printStackTrace();
+            }
+
         }
 
     }
 
-    /*public List<String[]> getHostInfoList() {
-
-        return hostInfoList;
-    }*/
 
     public RuntimeControlMsg getRuntimeControlMsg() {
         return runtimeControlMsg;
